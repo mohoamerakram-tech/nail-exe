@@ -40,30 +40,30 @@ export default function CartDrawer() {
       />
 
       {/* Retro Pastel OS Cart Drawer */}
-      <aside className="relative w-full max-w-md bg-[#fff7fa] border-l-[2.5px] border-[#8e7ea8] h-full flex flex-col justify-between shadow-2xl z-10">
+      <aside className="relative w-full max-w-md bg-[#fff7fa] border-l-2 border-[#57446d] h-full flex flex-col justify-between shadow-2xl z-10">
         {/* Title Bar */}
-        <div className="bg-gradient-to-r from-[#d8b4fe] via-[#e9d5ff] to-[#fbcfe8] px-4 py-2 border-b-[2px] border-[#8e7ea8] flex items-center justify-between">
+        <div className="bg-gradient-to-r from-[#d8b4fe] via-[#e9d5ff] to-[#fbcfe8] px-4 py-2 border-b-2 border-[#57446d] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-[#f472b6]">♡</span>
-            <span className="font-mono font-bold text-xs text-[#3b2b4e]">
+            <span className="text-[#db2777]">♡</span>
+            <span className="font-pixel-title font-bold text-xs text-[#3b2b4e]">
               shopping_bag.exe ({items.length})
             </span>
           </div>
           <button
             type="button"
             onClick={closeCart}
-            className="w-5 h-5 bg-white border border-[#8e7ea8] rounded-xs flex items-center justify-center text-xs font-bold text-[#6b5b82] hover:bg-[#f472b6] hover:text-white"
+            className="retro-btn hover:!bg-[#db2777] hover:!text-white"
           >
             ✕
           </button>
         </div>
 
         {/* Free Shipping Tracker */}
-        <div className="p-3 bg-[#fdf2f8] border-b border-[#fbcfe8] text-xs font-mono text-[#831843]">
+        <div className="p-3 bg-[#fdf2f8] border-b-2 border-[#57446d] text-xs font-pixel-body text-[#831843]">
           {amountNeededForFreeShipping > 0 ? (
             <div>
               <span>Add <b>{amountNeededForFreeShipping} DH</b> more for FREE Shipping ♡</span>
-              <div className="w-full bg-[#fce7f3] h-1.5 rounded-full overflow-hidden mt-1.5 border border-[#fbcfe8]">
+              <div className="w-full bg-[#fce7f3] h-2.5 rounded-full overflow-hidden mt-1.5 border-2 border-[#57446d]">
                 <div
                   className="bg-[#f472b6] h-full transition-all duration-300"
                   style={{
@@ -73,7 +73,7 @@ export default function CartDrawer() {
               </div>
             </div>
           ) : (
-            <span className="font-bold text-[#059669]">
+            <span className="font-bold text-[#059669] font-pixel-title text-[10px]">
               ✨ You unlocked FREE Tracked Shipping!
             </span>
           )}
@@ -84,28 +84,28 @@ export default function CartDrawer() {
           {items.length === 0 ? (
             <div className="py-24 flex flex-col items-center justify-center text-center gap-3">
               <span className="text-3xl">🛍️</span>
-              <p className="text-sm font-mono font-bold text-[#4a3856]">
+              <p className="text-xs font-pixel-title font-bold text-[#4a3856]">
                 Your nail bag is currently empty!
               </p>
-              <span className="text-xs font-mono text-[#8e7ea8]">
+              <span className="text-xs font-pixel-body text-[#8e7ea8]">
                 same girl... different nails &lt;3
               </span>
               <Link
                 href="/shop"
                 onClick={closeCart}
-                className="mt-3 px-4 py-2 text-xs font-mono font-bold bg-[#fbcfe8] border border-[#8e7ea8] rounded-sm text-[#3b2b4e] shadow-[2px_2px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white transition-all"
+                className="mt-3 pixel-btn-pink px-4 py-2 text-xs rounded-lg"
               >
-                BROWSE NAIL SETS ♡
+                [ BROWSE NAIL SETS ♡ ]
               </Link>
             </div>
           ) : (
             items.map((item) => (
               <div
                 key={item.id}
-                className="p-3 bg-white border-[1.5px] border-[#9d8ab8] rounded-sm shadow-[2px_2px_0px_0px_#e9d5ff] flex gap-3 items-center"
+                className="p-3 bg-white border-2 border-[#57446d] rounded-xl shadow-[2.5px_2.5px_0px_0px_#57446d] flex gap-3 items-center"
               >
                 {/* Thumbnail */}
-                <div className="relative w-16 h-16 bg-[#fff5f7] border border-[#d8b4fe] rounded-xs shrink-0 overflow-hidden">
+                <div className="relative w-16 h-16 bg-[#fff5f7] border-2 border-[#57446d] rounded-lg shrink-0 overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -120,17 +120,17 @@ export default function CartDrawer() {
                   <Link
                     href={`/shop/${item.slug}`}
                     onClick={closeCart}
-                    className="text-xs font-mono font-black text-[#3b2b4e] hover:text-[#db2777] transition-colors truncate block"
+                    className="text-xs font-pixel-title text-[#3b2b4e] hover:text-[#db2777] transition-colors truncate block"
                   >
                     {item.name}
                   </Link>
 
-                  <div className="text-[10px] font-mono text-[#6b5b82] mt-0.5 space-y-0.5">
+                  <div className="text-[10px] font-pixel-body text-[#6b5b82] mt-0.5 space-y-0.5">
                     <div>
                       {item.shape.toUpperCase()} // {item.length.toUpperCase()}
                     </div>
                     <div>
-                      SIZE: <span className="font-bold text-[#db2777]">{item.size}</span>
+                      SIZE: <span className="font-bold text-[#db2777] font-pixel">{item.size}</span>
                       {item.customSizes && (
                         <span className="ml-1 text-[9px] text-[#8e7ea8]">
                           ({item.customSizes.thumb},{item.customSizes.index},{item.customSizes.middle},{item.customSizes.ring},{item.customSizes.pinky})
@@ -145,25 +145,25 @@ export default function CartDrawer() {
 
                 {/* Quantity & Price */}
                 <div className="flex flex-col items-end gap-1.5 shrink-0">
-                  <span className="text-xs font-mono font-black text-[#3b2b4e]">
+                  <span className="text-xs font-pixel font-bold text-[#3b2b4e]">
                     {item.priceDH * item.quantity} DH
                   </span>
 
-                  <div className="flex items-center gap-1 bg-[#fdf4f7] border border-[#c4b5fd] rounded-xs">
+                  <div className="flex items-center gap-1 bg-[#fdf4f7] border-2 border-[#57446d] rounded-md">
                     <button
                       type="button"
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                      className="w-5 h-5 flex items-center justify-center text-xs font-mono text-[#6b5b82] hover:bg-[#fbcfe8]"
+                      className="w-5 h-5 flex items-center justify-center text-xs font-pixel text-[#57446d] hover:bg-[#fbcfe8]"
                     >
                       -
                     </button>
-                    <span className="w-5 text-center text-xs font-mono font-bold text-[#3b2b4e]">
+                    <span className="w-5 text-center text-xs font-pixel font-bold text-[#3b2b4e]">
                       {item.quantity}
                     </span>
                     <button
                       type="button"
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                      className="w-5 h-5 flex items-center justify-center text-xs font-mono text-[#6b5b82] hover:bg-[#fbcfe8]"
+                      className="w-5 h-5 flex items-center justify-center text-xs font-pixel text-[#57446d] hover:bg-[#fbcfe8]"
                     >
                       +
                     </button>
@@ -172,9 +172,9 @@ export default function CartDrawer() {
                   <button
                     type="button"
                     onClick={() => removeItem(item.id)}
-                    className="text-[9px] font-mono text-red-400 hover:text-red-600"
+                    className="text-[9px] font-pixel text-red-400 hover:text-red-600"
                   >
-                    remove
+                    [remove]
                   </button>
                 </div>
               </div>
@@ -184,16 +184,16 @@ export default function CartDrawer() {
 
         {/* Footer & Checkout */}
         {items.length > 0 && (
-          <div className="p-4 bg-[#fdf2f8] border-t-[1.5px] border-[#8e7ea8] flex flex-col gap-3">
-            <div className="p-2 bg-white border border-[#fbcfe8] rounded-xs text-[10px] font-mono text-[#db2777] flex items-center gap-2">
+          <div className="p-4 bg-[#fdf2f8] border-t-2 border-[#57446d] flex flex-col gap-3">
+            <div className="p-2 bg-white border-2 border-[#57446d] rounded-lg text-[10px] font-pixel-body text-[#db2777] flex items-center gap-2 shadow-[2px_2px_0px_0px_#57446d]">
               <span>🎁</span>
               <span>FREE Deluxe Prep Application Kit included with every set!</span>
             </div>
 
-            <div className="flex items-center justify-between text-xs font-mono">
+            <div className="flex items-center justify-between text-xs font-pixel-title">
               <span className="font-bold text-[#4a3856]">SUBTOTAL:</span>
               <div className="text-right">
-                <span className="text-base font-black text-[#3b2b4e]">
+                <span className="text-base font-bold text-[#3b2b4e] block">
                   {subtotalDH} DH
                 </span>
                 <span className="text-[10px] text-[#8e7ea8] block">
@@ -205,9 +205,9 @@ export default function CartDrawer() {
             <Link
               href="/checkout"
               onClick={closeCart}
-              className="w-full py-3 text-center text-xs font-mono font-bold uppercase tracking-wider bg-[#fbcfe8] border-[1.5px] border-[#8e7ea8] text-[#3b2b4e] rounded-sm shadow-[2px_2px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white transition-all active:translate-x-[1px] active:translate-y-[1px]"
+              className="pixel-btn-pink w-full py-3 text-center text-xs rounded-xl"
             >
-              PROCEED TO CHECKOUT ♡
+              [ PROCEED TO CHECKOUT ♡ ]
             </Link>
           </div>
         )}

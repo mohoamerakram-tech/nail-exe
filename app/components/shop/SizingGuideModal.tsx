@@ -28,19 +28,19 @@ export default function SizingGuideModal({ isOpen, onClose }: SizingGuideModalPr
       />
 
       {/* Retro Window Modal */}
-      <div className="relative w-full max-w-xl bg-white border-[2.5px] border-[#8e7ea8] rounded-md shadow-[6px_6px_0px_0px_#a78bfa] z-10 overflow-hidden">
+      <div className="relative w-full max-w-xl retro-pixel-window rounded-2xl z-10 overflow-hidden">
         {/* Title Bar */}
-        <div className="bg-gradient-to-r from-[#d8b4fe] via-[#e9d5ff] to-[#fbcfe8] px-4 py-2 border-b-[2px] border-[#8e7ea8] flex items-center justify-between">
+        <div className="retro-window-header">
           <div className="flex items-center gap-2">
-            <span className="text-[#f472b6]">♡</span>
-            <span className="font-mono font-bold text-xs text-[#3b2b4e]">
+            <span className="text-[#db2777]">♡</span>
+            <span className="font-pixel-title font-bold text-xs text-[#3b2b4e]">
               nail_sizing_guide.exe
             </span>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="w-5 h-5 bg-white border border-[#8e7ea8] rounded-xs flex items-center justify-center text-xs font-bold text-[#6b5b82] hover:bg-[#f472b6] hover:text-white"
+            className="retro-btn hover:!bg-[#db2777] hover:!text-white"
           >
             ✕
           </button>
@@ -49,40 +49,40 @@ export default function SizingGuideModal({ isOpen, onClose }: SizingGuideModalPr
         {/* Modal Content */}
         <div className="p-5 flex flex-col gap-4">
           {/* Tabs */}
-          <div className="flex items-center gap-2 border-b border-[#e2d5f1] pb-2">
+          <div className="flex items-center gap-2 border-b-2 border-[#57446d] pb-2">
             <button
               type="button"
               onClick={() => setActiveTab('chart')}
-              className={`px-3 py-1 text-xs font-mono font-bold rounded-sm border transition-all ${
+              className={`px-3 py-1 text-xs font-pixel font-bold rounded-lg border-2 transition-all ${
                 activeTab === 'chart'
-                  ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[1px_1px_0px_0px_#8e7ea8]'
-                  : 'text-[#8e7ea8] border-transparent hover:bg-[#fdf2f8]'
+                  ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]'
+                  : 'text-[#8e7ea8] border-[#57446d] bg-white hover:bg-[#fdf2f8]'
               }`}
             >
-              Preset Size Chart ♡
+              [ Size Chart ♡ ]
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('how-to')}
-              className={`px-3 py-1 text-xs font-mono font-bold rounded-sm border transition-all ${
+              className={`px-3 py-1 text-xs font-pixel font-bold rounded-lg border-2 transition-all ${
                 activeTab === 'how-to'
-                  ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[1px_1px_0px_0px_#8e7ea8]'
-                  : 'text-[#8e7ea8] border-transparent hover:bg-[#fdf2f8]'
+                  ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]'
+                  : 'text-[#8e7ea8] border-[#57446d] bg-white hover:bg-[#fdf2f8]'
               }`}
             >
-              How to Measure (Tape Method)
+              [ How to Measure ✨ ]
             </button>
           </div>
 
           {activeTab === 'chart' ? (
             <div className="flex flex-col gap-3">
-              <p className="text-xs text-[#6b5b82] font-mono">
+              <p className="text-xs text-[#6b5b82] font-pixel-body">
                 Compare your natural nail bed measurements (widest point in mm):
               </p>
 
-              <div className="overflow-x-auto border-[1.5px] border-[#8e7ea8] rounded-xs">
-                <table className="w-full text-left font-mono text-xs">
-                  <thead className="bg-[#f5e8ff] border-b border-[#8e7ea8] text-[#4a3856]">
+              <div className="overflow-x-auto border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d]">
+                <table className="w-full text-left font-pixel-title text-xs">
+                  <thead className="bg-[#f5e8ff] border-b-2 border-[#57446d] text-[#4a3856]">
                     <tr>
                       <th className="p-2">SIZE</th>
                       <th className="p-2">THUMB</th>
@@ -92,10 +92,10 @@ export default function SizingGuideModal({ isOpen, onClose }: SizingGuideModalPr
                       <th className="p-2">PINKY</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#f0e4fc]">
+                  <tbody className="divide-y-2 divide-[#57446d]/20 font-pixel-body">
                     {sizeChart.map((row) => (
                       <tr key={row.size} className="hover:bg-[#fff7fa]">
-                        <td className="p-2 font-bold text-[#db2777]">{row.size}</td>
+                        <td className="p-2 font-bold text-[#db2777] font-pixel-title">{row.size}</td>
                         <td className="p-2 text-[#4a3856]">{row.thumb}</td>
                         <td className="p-2 text-[#4a3856]">{row.index}</td>
                         <td className="p-2 text-[#4a3856]">{row.middle}</td>
@@ -107,36 +107,36 @@ export default function SizingGuideModal({ isOpen, onClose }: SizingGuideModalPr
                 </table>
               </div>
 
-              <div className="p-3 bg-[#fdf2f8] border border-[#fbcfe8] rounded-xs text-[11px] font-mono text-[#831843]">
+              <div className="p-3 bg-[#fdf2f8] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d] text-[11px] font-pixel-body text-[#831843]">
                 💡 In between sizes? Always size up! You can gently file down the sides of the press-on for an exact custom contour.
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-3 text-xs font-mono text-[#57446d]">
-              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border border-[#fbcfe8] rounded-xs">
-                <span className="font-bold text-[#db2777]">STEP 1:</span>
+            <div className="flex flex-col gap-3 text-xs font-pixel-body text-[#57446d]">
+              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d]">
+                <span className="font-bold text-[#db2777] font-pixel-title">STEP 1:</span>
                 <span>Press a piece of clear scotch tape smoothly across the widest part of your natural nail.</span>
               </div>
-              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border border-[#fbcfe8] rounded-xs">
-                <span className="font-bold text-[#db2777]">STEP 2:</span>
+              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d]">
+                <span className="font-bold text-[#db2777] font-pixel-title">STEP 2:</span>
                 <span>Use a pen to mark where the nail bed meets the skin on both left and right sidewalls.</span>
               </div>
-              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border border-[#fbcfe8] rounded-xs">
-                <span className="font-bold text-[#db2777]">STEP 3:</span>
+              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d]">
+                <span className="font-bold text-[#db2777] font-pixel-title">STEP 3:</span>
                 <span>Peel the tape off and place it flat on a ruler to measure the exact millimeters between the two marks.</span>
               </div>
-              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border border-[#fbcfe8] rounded-xs">
-                <span className="font-bold text-[#db2777]">CUSTOM SIZE:</span>
+              <div className="flex items-start gap-2.5 p-2.5 bg-[#fdf4f7] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d]">
+                <span className="font-bold text-[#db2777] font-pixel-title">CUSTOM:</span>
                 <span>Select &quot;Custom&quot; on the product page and input your 5 finger mm measurements at checkout!</span>
               </div>
             </div>
           )}
 
-          <div className="pt-2 border-t border-[#e2d5f1] flex justify-end">
+          <div className="pt-3 border-t-2 border-[#57446d] flex justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-1.5 text-xs font-mono font-bold bg-[#fbcfe8] border border-[#8e7ea8] text-[#3b2b4e] rounded-xs shadow-[1.5px_1.5px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white transition-colors"
+              className="pixel-btn-pink px-4 py-2 text-xs rounded-lg"
             >
               GOT IT, THANKS ♡
             </button>

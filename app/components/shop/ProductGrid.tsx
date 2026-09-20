@@ -11,12 +11,13 @@ interface ProductGridProps {
 export default function ProductGrid({ products }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="py-24 border-[3px] border-black bg-zinc-950 p-8 text-center flex flex-col items-center justify-center gap-3 shadow-[6px_6px_0px_0px_#000]">
-        <span className="text-xl font-mono font-bold text-[#ff2d78]">
-          NO ARCHIVAL PIECES FOUND // 該当品なし
+      <div className="py-16 pixel-card rounded-2xl p-8 text-center flex flex-col items-center justify-center gap-3">
+        <span className="text-2xl">💅✨</span>
+        <span className="text-sm font-pixel-title font-bold text-[#3b2b4e]">
+          NO NAIL SETS FOUND IN THIS VIBE ♡
         </span>
-        <p className="text-xs font-serif text-zinc-400 max-w-md">
-          The requested serialization chapter or garment category contains zero active specimens. Reset filter criteria to display canonical archive.
+        <p className="text-xs font-pixel-body text-[#8e7ea8] max-w-md">
+          Try picking another aesthetic or browse all handmade press-on sets.
         </p>
       </div>
     );

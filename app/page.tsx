@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { PRODUCTS } from '@/lib/products';
 import ProductCard from '@/app/components/shop/ProductCard';
 import InteractiveLogo from '@/app/components/navigation/InteractiveLogo';
+import AnimatedCat from '@/app/components/AnimatedCat';
+import HomeAnimation from '@/app/components/HomeAnimation';
 
 export default function HomePage() {
   const featuredProducts = PRODUCTS.slice(0, 6);
@@ -13,53 +15,59 @@ export default function HomePage() {
       {/* Centered Main Layout Container */}
       <div className="w-full max-w-5xl px-3 sm:px-6 py-6 flex flex-col gap-8">
         {/* 1. HERO RETRO WINDOW */}
-        <div className="retro-window w-full">
+        <div className="retro-pixel-window w-full">
           {/* Window Header */}
           <div className="retro-window-header">
             <div className="flex items-center gap-2">
-              <span className="text-[#f472b6]">♡</span>
-              <span className="text-xs font-mono font-bold text-[#4a3856]">
-                nail.exe
+              <span className="text-[#db2777]">♡</span>
+              <span className="font-pixel-title text-xs font-bold text-[#4a3856]">
+                nail.exe // window
               </span>
             </div>
             <div className="retro-btn-box">
               <button type="button" className="retro-btn">—</button>
               <button type="button" className="retro-btn">❐</button>
-              <button type="button" className="retro-btn">✕</button>
+              <button type="button" className="retro-btn hover:!bg-[#db2777] hover:!text-white">✕</button>
             </div>
           </div>
 
           {/* Hero Window Canvas */}
-          <div className="relative w-full h-[380px] sm:h-[480px] overflow-hidden bg-gradient-to-b from-[#bce0fd] via-[#fce7f3] to-[#fdf4f7]">
+          <div className="relative w-full h-[380px] sm:h-[480px] overflow-hidden bg-gradient-to-b from-[#bce0fd] via-[#fce7f3] to-[#fdf4f7] pixel-grid-canvas">
             {/* Background Clouds */}
             <div className="absolute inset-0 pointer-events-none opacity-80">
               <div className="absolute -top-10 -left-10 w-64 h-48 bg-white/70 rounded-full blur-xl" />
               <div className="absolute top-10 right-10 w-80 h-56 bg-white/70 rounded-full blur-xl" />
             </div>
 
-            {/* Floating Sparkles & Heart */}
-            <div className="absolute top-12 left-1/4 text-[#f472b6] text-xl animate-pulse">✦</div>
-            <div className="absolute top-20 right-1/3 text-white text-lg">✨</div>
-            <div className="absolute top-10 right-48 text-[#f472b6] text-2xl">♡</div>
+            {/* Floating Pixel Sparkles & Heart */}
+            <div className="absolute top-12 left-1/4 text-[#db2777] text-xl animate-pixel-twinkle">✦</div>
+            <div className="absolute top-20 right-1/3 text-white text-lg animate-pixel-twinkle" style={{ animationDelay: '1s' }}>✨</div>
+            <div className="absolute top-10 right-48 text-[#db2777] text-2xl animate-pixel-twinkle" style={{ animationDelay: '0.5s' }}>♡</div>
 
-            {/* Left Content: Interactive Logo & Floating Note */}
-            <div className="absolute top-8 left-6 sm:left-10 z-20 flex flex-col gap-4">
+            {/* Left Content: Interactive Logo, Floating Note & Thought Bubble */}
+            <div className="absolute top-6 sm:top-8 left-6 sm:left-10 z-20 flex flex-col gap-2.5 sm:gap-3">
               <div className="flex flex-col gap-1">
                 <InteractiveLogo variant="hero" className="w-[230px] sm:w-[300px]" />
               </div>
 
-              {/* Floating Note Window */}
-              <div className="bg-white/95 border-[1.5px] border-[#9d8ab8] rounded-sm p-3 shadow-[3px_3px_0px_0px_#d8b4fe] max-w-[200px] flex flex-col gap-1.5 backdrop-blur-xs">
-                <div className="flex items-center justify-between text-[10px] font-mono border-b border-[#fbcfe8] pb-1">
+              {/* Floating Note Window: about.me */}
+              <div className="bg-white/95 pixel-card rounded-xl p-3 max-w-[210px] flex flex-col gap-1.5 backdrop-blur-xs">
+                <div className="flex items-center justify-between font-pixel-title text-[9px] border-b-2 border-[#fbcfe8] pb-1">
                   <span className="text-[#db2777]">♡ about.me</span>
-                  <span className="text-[#8e7ea8]">✕</span>
+                  <span className="text-[#57446d]">✕</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-base text-[#f472b6]">💖</span>
-                  <p className="text-[11px] font-mono font-bold text-[#4a3856] leading-tight">
+                  <p className="font-pixel-title text-[10px] text-[#3b2b4e] leading-snug">
                     PRETTY HANDS <br />BRIGHTER DAYS &lt;3
                   </p>
                 </div>
+              </div>
+
+              {/* Thought Bubble placed right under about.me */}
+              <div className="bg-white/95 pixel-card rounded-xl px-3.5 py-2 font-pixel-body text-xs text-[#3b2b4e] flex flex-col items-center max-w-[210px] backdrop-blur-xs">
+                <span>same girl...</span>
+                <span className="font-bold text-[#db2777]">different nails &lt;3</span>
               </div>
             </div>
 
@@ -86,47 +94,31 @@ export default function HomePage() {
                 <Link
                   key={f.label}
                   href="/shop"
-                  className="flex items-center gap-2 px-2 py-1 bg-white/80 border border-[#bca6df] rounded-xs text-[10px] font-mono font-bold text-[#4a3856] hover:bg-[#fbcfe8] transition-colors shadow-[1.5px_1.5px_0px_0px_#d8b4fe]"
+                  className="flex items-center gap-2 px-2 py-1 bg-white/90 border-2 border-[#57446d] rounded-lg font-pixel-title text-[9px] text-[#3b2b4e] hover:bg-[#fbcfe8] transition-colors shadow-[2px_2px_0px_0px_#57446d]"
                 >
                   <span>{f.icon}</span>
-                  <span>{f.label}</span>
+                  <span>[{f.label}]</span>
                 </Link>
               ))}
             </div>
 
-            {/* Floating Thought Bubble: "same girl... different nails <3" */}
-            <div className="hidden sm:flex absolute bottom-8 right-12 z-20 bg-white/95 border-[1.5px] border-[#9d8ab8] rounded-md px-3 py-2 text-[11px] font-mono text-[#4a3856] shadow-[2px_2px_0px_0px_#d8b4fe] flex-col items-center">
-              <span>same girl...</span>
-              <span className="font-bold text-[#db2777]">different nails &lt;3</span>
-            </div>
-
-            {/* Sleeping Angel Kitty on Cloud */}
-            <div className="absolute bottom-2 right-44 z-20 hidden md:block">
-              <div className="relative w-20 h-16">
-                <Image
-                  src="/images/icons/cat-grey.png"
-                  alt="Cute sleeping cat"
-                  fill
-                  sizes="80px"
-                  className="object-contain"
-                />
-              </div>
-            </div>
+            {/* Looping kitty window; hover plays its greeting once. */}
+            <AnimatedCat />
           </div>
         </div>
 
         {/* 2. ANNOUNCEMENT TICKER */}
-        <div className="w-full bg-[#fce7f3] border-y-[1.5px] border-[#c4b5fd] py-2 overflow-hidden select-none">
-          <div className="animate-marquee-kawaii flex items-center gap-8 whitespace-nowrap text-xs font-mono font-bold text-[#4a3856]">
+        <div className="w-full bg-[#fce7f3] border-y-2 border-[#57446d] py-2 overflow-hidden select-none">
+          <div className="animate-marquee-kawaii flex items-center gap-8 whitespace-nowrap font-pixel-title text-[10px] text-[#3b2b4e]">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="flex items-center gap-4">
-                <span className="text-[#db2777]">✧ ☆</span>
+                <span className="text-[#db2777]">✧ ★</span>
                 <span>WORLDWIDE SHIPPING</span>
-                <span className="text-[#f472b6]">♡</span>
+                <span className="text-[#db2777]">♡</span>
                 <span>HANDMADE WITH LOVE</span>
-                <span className="text-[#f472b6]">♡</span>
+                <span className="text-[#db2777]">♡</span>
                 <span>HIGH QUALITY &amp; REUSABLE</span>
-                <span className="text-[#db2777]">☆ ✧</span>
+                <span className="text-[#db2777]">★ ✧</span>
               </div>
             ))}
           </div>
@@ -134,12 +126,17 @@ export default function HomePage() {
 
         {/* 3. SHOP BY VIBE SECTION */}
         <section id="vibe" className="flex flex-col items-center gap-5">
-          <div className="flex items-center gap-2">
-            <span className="text-[#f472b6]">♡</span>
-            <h2 className="text-xl sm:text-2xl font-mono font-bold text-[#3b2b4e]">
-              Shop by vibe
-            </h2>
-            <span className="text-[#f472b6]">♡</span>
+          <div className="relative flex w-full min-h-[175px] items-end pb-4 sm:min-h-[150px]">
+            <div className="relative z-10">
+              <span className="font-pixel-body text-xs text-[#db2777]">a set for every side of you ♡</span>
+              <h2 className="font-pixel-title text-lg sm:text-xl uppercase font-bold text-[#3b2b4e] mt-2">Shop by vibe</h2>
+            </div>
+            <div className="absolute left-0 top-0 w-[175px] sm:bottom-0 sm:left-[205px] sm:top-auto sm:w-[220px] lg:left-[240px] lg:w-[270px]">
+              <HomeAnimation sequence={6} label="the stargazing cat" alt="Gray cat blinking among little stars next to Shop by vibe" />
+            </div>
+            <div className="absolute right-0 top-0 w-[175px] sm:-bottom-2 sm:right-2 sm:top-auto sm:w-[230px] lg:w-[270px] z-10">
+              <HomeAnimation sequence={4} label="the curious cat" alt="Calico cat playing with a toy mouse beside the nail collections" />
+            </div>
           </div>
 
           {/* 4 Retro Window Vibe Cards */}
@@ -169,19 +166,19 @@ export default function HomePage() {
               <Link
                 key={card.title}
                 href={`/shop?vibe=${card.vibe}`}
-                className="retro-window group flex flex-col transition-transform hover:-translate-y-1"
+                className="pixel-mini-window group flex flex-col transition-all hover:-translate-y-1"
               >
                 {/* Window Mini Header */}
-                <div className="bg-[#ede7f6] px-2 py-1 border-b border-[#8e7ea8] flex items-center justify-between text-[9px] font-mono text-[#6b5b82]">
+                <div className="bg-[#ede7f6] px-2.5 py-1.5 border-b-2 border-[#57446d] flex items-center justify-between font-pixel-title text-[9px] text-[#57446d]">
                   <span>vibe.exe</span>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1.5">
                     <span>—</span>
                     <span>✕</span>
                   </div>
                 </div>
 
                 {/* Photo */}
-                <div className="relative w-full aspect-square bg-[#fff5f7] overflow-hidden">
+                <div className="relative w-full aspect-square bg-[#fff5f7] border-b-2 border-[#57446d] overflow-hidden">
                   <Image
                     src={card.image}
                     alt={card.title}
@@ -192,35 +189,40 @@ export default function HomePage() {
                 </div>
 
                 {/* Card Footer */}
-                <div className="p-2.5 bg-white flex items-center justify-between font-mono text-xs font-bold text-[#4a3856]">
-                  <span>{card.title}</span>
+                <div className="p-2.5 bg-white flex items-center justify-between font-pixel-title text-[11px] text-[#3b2b4e]">
+                  <span>[{card.title}]</span>
                   <span className="text-[#db2777]">➔</span>
                 </div>
               </Link>
             ))}
           </div>
 
-          <Link
-            href="/shop"
-            className="mt-2 px-6 py-2.5 bg-[#fbcfe8] border-[1.5px] border-[#8e7ea8] rounded-sm font-mono text-xs font-bold text-[#3b2b4e] shadow-[2px_2px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white transition-all active:translate-x-[1px] active:translate-y-[1px]"
-          >
-            SHOP ALL ➔
-          </Link>
+          <div className="flex w-full min-h-[70px] items-center justify-center">
+            <Link href="/shop" className="pixel-btn-pink relative z-10 px-6 py-2.5 text-xs rounded-xl">
+              [ VIEW ALL VIBES ➔ ]
+            </Link>
+          </div>
         </section>
 
         {/* 4. PRODUCT SHOWCASE GRID */}
-        <section className="flex flex-col gap-4">
-          <div className="flex items-center justify-between border-b border-[#e2d5f1] pb-2">
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg sm:text-xl font-mono font-bold text-[#3b2b4e]">
+        <section className="relative flex flex-col gap-4 pt-12 sm:pt-16">
+          <div className="relative flex min-h-[155px] items-end justify-between border-b-2 border-[#57446d] pb-2 lg:min-h-[130px]">
+            <div className="absolute left-0 top-0 w-[175px] lg:bottom-0 lg:left-[250px] lg:top-auto lg:w-[270px] z-10">
+              <HomeAnimation sequence={7} label="the yarn cat" alt="Gray cat playing with pink yarn next to Trending Nails" />
+            </div>
+            <div className="absolute right-0 top-0 w-[175px] lg:bottom-0 lg:right-[150px] lg:top-auto lg:w-[240px] z-10">
+              <HomeAnimation sequence={3} label="the happy cat" alt="Calico cat tilting its head above the trending nails" />
+            </div>
+            <div className="relative z-10 flex items-center gap-2">
+              <h2 className="font-pixel-title text-base sm:text-lg font-bold text-[#3b2b4e]">
                 Trending Nails ♡
               </h2>
             </div>
             <Link
               href="/shop"
-              className="text-xs font-mono font-bold text-[#db2777] hover:underline"
+              className="relative z-10 hidden sm:block font-pixel text-xs text-[#db2777] hover:underline"
             >
-              View all sets ➔
+              [ View all sets ➔ ]
             </Link>
           </div>
 
@@ -229,82 +231,56 @@ export default function HomePage() {
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
+          <div className="relative flex min-h-[170px] items-start justify-center pt-3 sm:min-h-[155px] sm:items-center sm:pt-0">
+            <div className="absolute bottom-0 left-0 w-[190px] sm:left-8 sm:w-[270px]">
+              <HomeAnimation sequence={8} label="the heart cat" alt="Gray cat surrounded by pink hearts beside the nail collection" />
+            </div>
+            <Link href="/shop" className="relative z-10 font-pixel-title text-[10px] sm:text-xs text-[#db2777] hover:underline">Find your next favorite ➔</Link>
+            <div className="absolute bottom-0 right-0 w-[215px] sm:right-8 sm:w-[270px]">
+              <HomeAnimation sequence={5} label="the playful cat" alt="Calico cat surrounded by hearts and sparkles" />
+            </div>
+          </div>
         </section>
 
-        {/* 5. MASCOT BANNER: "Not just nails, a mood. ♡" */}
-        <div className="retro-window w-full bg-gradient-to-r from-[#ede9fe] via-[#fdf2f8] to-[#fce7f3] p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          {/* Left: Kitty Speech Bubble */}
-          <div className="flex items-center gap-3">
-            <div className="relative w-14 h-14 shrink-0">
-              <Image
-                src="/images/icons/cat-calico.png"
-                alt="Cute calico cat"
-                fill
-                sizes="56px"
-                className="object-contain"
-              />
-            </div>
-            <div className="bg-white border border-[#bca6df] rounded-md p-2 text-[10px] font-mono text-[#4a3856] shadow-[1.5px_1.5px_0px_0px_#d8b4fe]">
-              <span>YOU DESERVE <br /><b>PRETTY THINGS &lt;3</b></span>
-            </div>
-          </div>
-
-          {/* Center: Cursive Text */}
-          <div className="text-center">
-            <span className="font-serif italic font-black text-2xl sm:text-3xl text-[#3b2b4e]">
-              Not just nails, <br className="sm:hidden" />a mood. ♡
-            </span>
-            <div className="text-xs font-mono text-[#8e7ea8] mt-0.5">
-              ✧ crafted for delicate hands ✧
-            </div>
-          </div>
-
-          {/* Right: Pixel Art Mirror & Polish */}
-          <div className="flex items-center gap-3 text-2xl select-none">
-            <span title="Hand Mirror">🪞</span>
-            <span title="Nail Polish">💅</span>
-            <span title="Floppy Disk" className="text-xl">💾</span>
-          </div>
-        </div>
       </div>
 
       {/* 6. RETRO GINGHAM FOOTER */}
-      <footer className="w-full gingham-pattern border-t-[2.5px] border-[#8e7ea8] mt-12 pt-10 pb-4 px-4">
+      <footer className="w-full gingham-pattern border-t-2 border-[#57446d] mt-12 pt-10 pb-4 px-4">
         <div className="max-w-5xl mx-auto flex flex-col gap-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             {/* Brand */}
             <div>
-              <span className="font-serif font-black text-2xl text-[#3b2b4e]">
-                Walls Have Mouths
+              <span className="font-pixel-title font-bold text-xl text-[#3b2b4e] block">
+                nail.exe // PRESS ON NAILS
               </span>
-              <span className="block text-xs font-mono tracking-widest text-[#8e7ea8]">
-                PRESS ON NAILS ♡
+              <span className="block font-pixel-arcade text-[8px] tracking-widest text-[#db2777] mt-1">
+                SALON QUALITY HANDMADE WITH LOVE ♡
               </span>
             </div>
 
             {/* Links */}
-            <div className="flex items-center gap-6 text-xs font-mono font-bold text-[#4a3856]">
-              <Link href="/" className="hover:text-[#db2777]">Home</Link>
-              <Link href="/shop" className="hover:text-[#db2777]">Shop</Link>
-              <Link href="/#vibe" className="hover:text-[#db2777]">Vibes</Link>
-              <Link href="/#faq" className="hover:text-[#db2777]">FAQ</Link>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#db2777]">Instagram</a>
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-pixel text-[11px] font-bold text-[#3b2b4e]">
+              <Link href="/" className="hover:text-[#db2777] whitespace-nowrap">[ Home ]</Link>
+              <Link href="/shop" className="hover:text-[#db2777] whitespace-nowrap">[ Shop ]</Link>
+              <Link href="/#vibe" className="hover:text-[#db2777] whitespace-nowrap">[ Vibes ]</Link>
+              <Link href="/#faq" className="hover:text-[#db2777] whitespace-nowrap">[ FAQ ]</Link>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#db2777] whitespace-nowrap">[ IG ]</a>
             </div>
 
             {/* Mailing List Input */}
             <div className="flex flex-col gap-1.5 w-full sm:w-auto">
-              <span className="text-xs font-mono text-[#4a3856]">
+              <span className="font-pixel-title text-[10px] text-[#3b2b4e]">
                 Join the mailing list ♡
               </span>
-              <div className="flex items-center bg-white border-[1.5px] border-[#8e7ea8] rounded-sm overflow-hidden shadow-[2px_2px_0px_0px_#d8b4fe]">
+              <div className="flex items-center bg-white border-2 border-[#57446d] rounded-xl overflow-hidden shadow-[2px_2px_0px_0px_#57446d]">
                 <input
                   type="email"
                   placeholder="your email..."
-                  className="px-3 py-1.5 text-xs font-mono outline-none text-[#3b2b4e] placeholder-[#a79bbd]"
+                  className="px-3 py-1.5 text-xs font-pixel-body outline-none text-[#3b2b4e] placeholder-[#a79bbd]"
                 />
                 <button
                   type="button"
-                  className="px-3 py-1.5 bg-[#fbcfe8] text-[#3b2b4e] font-bold text-xs hover:bg-[#f472b6] hover:text-white transition-colors"
+                  className="px-3 py-1.5 bg-[#fbcfe8] text-[#3b2b4e] font-pixel text-xs hover:bg-[#f472b6] hover:text-white transition-colors"
                 >
                   ➔
                 </button>
@@ -313,9 +289,9 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Taskbar */}
-          <div className="pt-4 border-t border-[#fbcfe8] flex items-center justify-between text-[11px] font-mono text-[#6b5b82]">
+          <div className="pt-4 border-t-2 border-[#57446d] flex items-center justify-between font-pixel text-[10px] text-[#57446d]">
             <span>♡ made with love in morocco</span>
-            <span className="font-bold text-[#4a3856]">walls have mouths.exe</span>
+            <span className="font-bold text-[#db2777]">nail.exe [ONLINE]</span>
             <div className="flex items-center gap-2">
               <span>📶 🔋</span>
               <span>11:11</span>

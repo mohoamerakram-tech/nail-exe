@@ -84,7 +84,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
         {/* Left Column: Image Gallery Frame */}
         <div className="md:col-span-6 flex flex-col gap-3">
           {/* Main Photo Frame */}
-          <div className="relative w-full aspect-square bg-[#fff5f7] border-[2px] border-[#9d8ab8] rounded-md shadow-[4px_4px_0px_0px_#cfbfe6] overflow-hidden group">
+          <div className="relative w-full aspect-square bg-[#fff5f7] border-[2.5px] border-[#57446d] rounded-2xl shadow-[4px_4px_0px_0px_#57446d] overflow-hidden group">
             <Image
               src={activeImage}
               alt={product.name}
@@ -98,7 +98,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <button
               type="button"
               onClick={() => toggleWishlist(product.id)}
-              className="absolute top-3 right-3 w-8 h-8 rounded-sm bg-white/90 border border-[#c4b5fd] flex items-center justify-center text-sm shadow-[1px_1px_0px_0px_#a78bfa] hover:bg-white"
+              className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-white border-2 border-[#57446d] flex items-center justify-center text-sm shadow-[2px_2px_0px_0px_#57446d] hover:bg-[#fbcfe8]"
             >
               <span className={isFav ? 'text-[#db2777]' : 'text-[#8e7ea8]'}>
                 {isFav ? '♥' : '♡'}
@@ -114,10 +114,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   key={img}
                   type="button"
                   onClick={() => setActiveImageIndex(idx)}
-                  className={`relative w-16 h-16 rounded-xs border-2 overflow-hidden transition-all ${
+                  className={`relative w-16 h-16 rounded-xl border-2 overflow-hidden transition-all ${
                     activeImageIndex === idx
-                      ? 'border-[#f472b6] shadow-[2px_2px_0px_0px_#f472b6]'
-                      : 'border-[#c4b5fd] opacity-70 hover:opacity-100'
+                      ? 'border-[#57446d] bg-[#fbcfe8] shadow-[2.5px_2.5px_0px_0px_#57446d]'
+                      : 'border-[#57446d] opacity-60 hover:opacity-100'
                   }`}
                 >
                   <Image
@@ -133,7 +133,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
           )}
 
           {/* Guarantee Note Box */}
-          <div className="p-3 bg-[#fdf2f8] border-[1.5px] border-[#fbcfe8] rounded-sm text-xs font-mono text-[#831843] flex items-center gap-2">
+          <div className="p-3 bg-[#fdf2f8] border-2 border-[#57446d] rounded-xl shadow-[2.5px_2.5px_0px_0px_#57446d] text-xs font-pixel-body text-[#831843] flex items-center gap-2">
             <span>✨</span>
             <span>Handmade with 100% salon soft gel • High quality &amp; reusable 5+ times</span>
           </div>
@@ -142,32 +142,32 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
         {/* Right Column: Customization & Purchase Suite */}
         <div className="md:col-span-6 flex flex-col gap-5">
           {/* Header & Pricing */}
-          <div className="flex flex-col gap-1 pb-3 border-b border-[#e2d5f1]">
-            <span className="text-[11px] font-mono font-bold text-[#db2777] uppercase tracking-wider">
+          <div className="flex flex-col gap-1 pb-3 border-b-2 border-[#57446d]">
+            <span className="text-[10px] font-pixel-arcade font-bold text-[#db2777] uppercase tracking-wider">
               {product.vibe.toUpperCase()} SET ♡
             </span>
-            <h1 className="text-2xl sm:text-3xl font-mono font-black text-[#3b2b4e] uppercase">
+            <h1 className="text-2xl sm:text-3xl font-pixel-title font-black text-[#3b2b4e] uppercase">
               {product.name}
             </h1>
             <div className="flex items-center gap-3 mt-1">
-              <span className="text-2xl font-mono font-black text-[#db2777]">
+              <span className="text-2xl font-pixel font-black text-[#db2777]">
                 {product.priceDH} DH
               </span>
-              <span className="text-xs font-mono text-[#8e7ea8]">
+              <span className="text-xs font-pixel-arcade text-[#8e7ea8]">
                 (~${product.priceUSD} USD)
               </span>
-              <span className="text-[11px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-xs border border-emerald-200 ml-auto">
+              <span className="text-[10px] font-pixel-arcade text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md border-2 border-[#57446d] shadow-[1.5px_1.5px_0px_0px_#57446d] ml-auto">
                 In Stock &amp; Ready to Ship
               </span>
             </div>
-            <p className="text-xs font-serif text-[#6b5b82] mt-1">
+            <p className="text-xs font-pixel-body text-[#6b5b82] mt-1">
               {product.tagline}
             </p>
           </div>
 
           {/* 1. Nail Shape Selector */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-mono font-bold text-[#4a3856] flex items-center justify-between">
+            <label className="text-xs font-pixel-title font-bold text-[#4a3856] flex items-center justify-between">
               <span>NAIL SHAPE:</span>
               <span className="text-[#db2777] uppercase">{selectedShape}</span>
             </label>
@@ -177,10 +177,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   key={shape.id}
                   type="button"
                   onClick={() => setSelectedShape(shape.id)}
-                  className={`py-2 px-2.5 rounded-sm border text-xs font-mono font-bold transition-all flex items-center gap-1.5 justify-center ${
+                  className={`py-2 px-2.5 rounded-xl border-2 text-xs font-pixel-title font-bold transition-all flex items-center gap-1.5 justify-center ${
                     selectedShape === shape.id
-                      ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#8e7ea8]'
-                      : 'bg-white border-[#c4b5fd] text-[#6b5b82] hover:border-[#8e7ea8]'
+                      ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2.5px_2.5px_0px_0px_#57446d]'
+                      : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
                   }`}
                 >
                   <span>{shape.icon}</span>
@@ -192,7 +192,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
           {/* 2. Nail Length Selector */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-mono font-bold text-[#4a3856] flex items-center justify-between">
+            <label className="text-xs font-pixel-title font-bold text-[#4a3856] flex items-center justify-between">
               <span>NAIL LENGTH:</span>
               <span className="text-[#db2777] uppercase">{selectedLength}</span>
             </label>
@@ -202,10 +202,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   key={len.id}
                   type="button"
                   onClick={() => setSelectedLength(len.id)}
-                  className={`py-2 px-2 rounded-sm border text-xs font-mono font-bold transition-all text-center ${
+                  className={`py-2 px-2 rounded-xl border-2 text-xs font-pixel-title font-bold transition-all text-center ${
                     selectedLength === len.id
-                      ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#8e7ea8]'
-                      : 'bg-white border-[#c4b5fd] text-[#6b5b82] hover:border-[#8e7ea8]'
+                      ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2.5px_2.5px_0px_0px_#57446d]'
+                      : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
                   }`}
                 >
                   {len.id.toUpperCase()}
@@ -216,7 +216,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
           {/* 3. Nail Size Selector & Guide Modal Trigger */}
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between text-xs font-mono font-bold text-[#4a3856]">
+            <div className="flex items-center justify-between text-xs font-pixel-title font-bold text-[#4a3856]">
               <span>SELECT SIZE:</span>
               <button
                 type="button"
@@ -233,10 +233,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   key={sz}
                   type="button"
                   onClick={() => setSelectedSize(sz)}
-                  className={`py-2 rounded-sm border text-xs font-mono font-black transition-all ${
+                  className={`py-2 rounded-xl border-2 text-xs font-pixel-title font-bold transition-all ${
                     selectedSize === sz
-                      ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#8e7ea8]'
-                      : 'bg-white border-[#c4b5fd] text-[#6b5b82] hover:border-[#8e7ea8]'
+                      ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2.5px_2.5px_0px_0px_#57446d]'
+                      : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
                   }`}
                 >
                   {sz}
@@ -246,21 +246,21 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
             {/* Custom mm input fields if Custom is selected */}
             {selectedSize === 'Custom' && (
-              <div className="p-3 bg-white border border-[#c4b5fd] rounded-xs mt-1 flex flex-col gap-2">
-                <span className="text-[11px] font-mono font-bold text-[#4a3856]">
+              <div className="p-3 bg-white border-2 border-[#57446d] rounded-xl shadow-[2.5px_2.5px_0px_0px_#57446d] mt-1 flex flex-col gap-2">
+                <span className="text-[11px] font-pixel-title font-bold text-[#4a3856]">
                   Enter your natural nail bed widths in millimeters (mm):
                 </span>
-                <div className="grid grid-cols-5 gap-1.5 text-xs font-mono text-center">
+                <div className="grid grid-cols-5 gap-1.5 text-xs font-pixel-body text-center">
                   {(['thumb', 'index', 'middle', 'ring', 'pinky'] as const).map((finger) => (
                     <div key={finger} className="flex flex-col gap-0.5">
-                      <span className="text-[10px] text-[#8e7ea8] uppercase">{finger.slice(0, 4)}</span>
+                      <span className="text-[10px] text-[#8e7ea8] uppercase font-pixel">{finger.slice(0, 4)}</span>
                       <input
                         type="text"
                         value={customSizes[finger]}
                         onChange={(e) =>
                           setCustomSizes((prev) => ({ ...prev, [finger]: e.target.value }))
                         }
-                        className="border border-[#a79bbd] rounded-xs p-1 text-center font-bold text-[#3b2b4e] outline-none focus:border-[#db2777]"
+                        className="border-2 border-[#57446d] rounded-lg p-1 text-center font-bold text-[#3b2b4e] outline-none focus:border-[#db2777]"
                       />
                     </div>
                   ))}
@@ -271,44 +271,44 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
           {/* 4. Adhesive Choice */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-mono font-bold text-[#4a3856]">
+            <label className="text-xs font-pixel-title font-bold text-[#4a3856]">
               APPLICATION ADHESIVE CHOICE:
             </label>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => setSelectedAdhesive('sticky-tabs')}
-                className={`p-2 rounded-sm border text-left text-[11px] font-mono transition-all ${
+                className={`p-2 rounded-xl border-2 text-left text-[11px] font-pixel-body transition-all ${
                   selectedAdhesive === 'sticky-tabs'
-                    ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[1.5px_1.5px_0px_0px_#8e7ea8]'
-                    : 'bg-white border-[#c4b5fd] text-[#6b5b82]'
+                    ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]'
+                    : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
                 }`}
               >
-                <span className="font-bold block">Adhesive Tabs</span>
+                <span className="font-bold block font-pixel-title text-[10px]">Adhesive Tabs</span>
                 <span className="text-[9px] text-[#8e7ea8]">1-3 days reusable</span>
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedAdhesive('liquid-glue')}
-                className={`p-2 rounded-sm border text-left text-[11px] font-mono transition-all ${
+                className={`p-2 rounded-xl border-2 text-left text-[11px] font-pixel-body transition-all ${
                   selectedAdhesive === 'liquid-glue'
-                    ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[1.5px_1.5px_0px_0px_#8e7ea8]'
-                    : 'bg-white border-[#c4b5fd] text-[#6b5b82]'
+                    ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]'
+                    : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
                 }`}
               >
-                <span className="font-bold block">Liquid Glue</span>
+                <span className="font-bold block font-pixel-title text-[10px]">Liquid Glue</span>
                 <span className="text-[9px] text-[#8e7ea8]">2-3+ weeks wear</span>
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedAdhesive('both')}
-                className={`p-2 rounded-sm border text-left text-[11px] font-mono transition-all ${
+                className={`p-2 rounded-xl border-2 text-left text-[11px] font-pixel-body transition-all ${
                   selectedAdhesive === 'both'
-                    ? 'bg-[#fbcfe8] border-[#8e7ea8] text-[#3b2b4e] shadow-[1.5px_1.5px_0px_0px_#8e7ea8]'
-                    : 'bg-white border-[#c4b5fd] text-[#6b5b82]'
+                    ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]'
+                    : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
                 }`}
               >
-                <span className="font-bold block">Both (Tabs+Glue)</span>
+                <span className="font-bold block font-pixel-title text-[10px]">Both (Tabs+Glue)</span>
                 <span className="text-[9px] text-[#8e7ea8]">Best versatility</span>
               </button>
             </div>
@@ -319,24 +319,24 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <button
               type="button"
               onClick={handleAddToCart}
-              className={`w-full py-3.5 px-6 rounded-sm text-xs font-mono font-black uppercase tracking-wider transition-all ${
+              className={`pixel-btn-pink w-full py-3.5 px-6 rounded-xl text-xs font-pixel-title uppercase transition-all ${
                 addedNotice
-                  ? 'bg-emerald-400 text-white border-2 border-emerald-600 shadow-[2px_2px_0px_0px_#059669]'
-                  : 'bg-[#fbcfe8] border-[2px] border-[#8e7ea8] text-[#3b2b4e] shadow-[3px_3px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white active:translate-x-[1px] active:translate-y-[1px]'
+                  ? '!bg-emerald-400 !text-white !border-[#57446d]'
+                  : ''
               }`}
             >
-              {addedNotice ? '✓ ADDED TO BAG ♡' : 'ADD TO BAG // 220 DH ♡'}
+              {addedNotice ? '✓ ADDED TO BAG ♡' : `[ ADD TO BAG // ${product.priceDH} DH ♡ ]`}
             </button>
           </div>
 
           {/* Info Accordion / Tabs */}
-          <div className="border border-[#d8b4fe] rounded-sm bg-white overflow-hidden mt-2">
-            <div className="flex border-b border-[#e2d5f1] text-xs font-mono font-bold bg-[#faf5ff]">
+          <div className="border-2 border-[#57446d] rounded-xl bg-white shadow-[3px_3px_0px_0px_#57446d] overflow-hidden mt-2">
+            <div className="flex border-b-2 border-[#57446d] text-xs font-pixel-title font-bold bg-[#faf5ff]">
               <button
                 type="button"
                 onClick={() => setActiveInfoTab('details')}
-                className={`flex-1 py-2 text-center transition-colors ${
-                  activeInfoTab === 'details' ? 'bg-white text-[#db2777] border-b-2 border-[#db2777]' : 'text-[#8e7ea8]'
+                className={`flex-1 py-2.5 text-center transition-colors ${
+                  activeInfoTab === 'details' ? 'bg-white text-[#db2777] border-b-2 border-[#db2777]' : 'text-[#8e7ea8] hover:text-[#57446d]'
                 }`}
               >
                 Set Details
@@ -344,8 +344,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <button
                 type="button"
                 onClick={() => setActiveInfoTab('application')}
-                className={`flex-1 py-2 text-center transition-colors ${
-                  activeInfoTab === 'application' ? 'bg-white text-[#db2777] border-b-2 border-[#db2777]' : 'text-[#8e7ea8]'
+                className={`flex-1 py-2.5 text-center transition-colors ${
+                  activeInfoTab === 'application' ? 'bg-white text-[#db2777] border-b-2 border-[#db2777]' : 'text-[#8e7ea8] hover:text-[#57446d]'
                 }`}
               >
                 How to Apply
@@ -353,15 +353,15 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <button
                 type="button"
                 onClick={() => setActiveInfoTab('reviews')}
-                className={`flex-1 py-2 text-center transition-colors ${
-                  activeInfoTab === 'reviews' ? 'bg-white text-[#db2777] border-b-2 border-[#db2777]' : 'text-[#8e7ea8]'
+                className={`flex-1 py-2.5 text-center transition-colors ${
+                  activeInfoTab === 'reviews' ? 'bg-white text-[#db2777] border-b-2 border-[#db2777]' : 'text-[#8e7ea8] hover:text-[#57446d]'
                 }`}
               >
                 Reviews ({product.reviewsCount})
               </button>
             </div>
 
-            <div className="p-4 text-xs font-mono text-[#57446d]">
+            <div className="p-4 text-xs font-pixel-body text-[#57446d]">
               {activeInfoTab === 'details' && (
                 <ul className="space-y-1.5">
                   {product.details.map((d, i) => (
@@ -383,10 +383,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
               {activeInfoTab === 'reviews' && (
                 <div className="space-y-3">
-                  <div className="p-2.5 bg-[#fdf4f7] rounded-xs border border-[#fbcfe8]">
-                    <div className="flex items-center justify-between font-bold text-[#db2777]">
+                  <div className="p-2.5 bg-[#fdf4f7] rounded-lg border-2 border-[#57446d] shadow-[2px_2px_0px_0px_#57446d]">
+                    <div className="flex items-center justify-between font-bold text-[#db2777] font-pixel-title text-[10px]">
                       <span>★★★★★ Kenza M.</span>
-                      <span className="text-[10px] text-[#8e7ea8]">Verified Buyer (Casablanca)</span>
+                      <span className="text-[9px] text-[#8e7ea8]">Verified Buyer (Casablanca)</span>
                     </div>
                     <p className="mt-1 text-[#4a3856]">Obsessed with this set! So sturdy and looks exactly like a 500 DH salon acrylic set. Will definitely order more.</p>
                   </div>

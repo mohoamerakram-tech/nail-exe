@@ -59,21 +59,21 @@ export default function CheckoutClient() {
   if (isOrdered) {
     return (
       <div className="w-full max-w-xl mx-auto px-4 py-16">
-        <div className="retro-window p-8 text-center flex flex-col items-center gap-4 bg-white">
+        <div className="retro-pixel-window p-8 text-center flex flex-col items-center gap-4 bg-white rounded-2xl">
           <span className="text-4xl">💅💖</span>
-          <span className="px-3 py-1 bg-[#fbcfe8] text-[#db2777] font-mono text-xs font-bold rounded-xs">
+          <span className="px-3 py-1 bg-[#fbcfe8] text-[#db2777] font-pixel-arcade text-[8px] font-bold rounded-md border-2 border-[#57446d]">
             ORDER CONFIRMED // {orderId}
           </span>
-          <h1 className="text-2xl font-mono font-black text-[#3b2b4e]">
+          <h1 className="text-2xl font-pixel-title font-black text-[#3b2b4e]">
             Thank you, {formData.fullName}! ♡
           </h1>
-          <p className="text-xs font-serif text-[#6b5b82] max-w-md leading-relaxed">
+          <p className="text-xs font-pixel-body text-[#6b5b82] max-w-md leading-relaxed">
             Your custom press-on nail sets are now queued for artisan hand-crafting. You will receive a confirmation message on WhatsApp or SMS when your package ships.
           </p>
 
           <Link
             href="/"
-            className="mt-4 px-6 py-2.5 bg-[#fbcfe8] border-[1.5px] border-[#8e7ea8] rounded-sm font-mono text-xs font-bold text-[#3b2b4e] shadow-[2px_2px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white transition-all"
+            className="mt-4 pixel-btn-pink px-6 py-2.5 rounded-xl text-xs"
           >
             RETURN HOME ♡
           </Link>
@@ -85,17 +85,17 @@ export default function CheckoutClient() {
   if (items.length === 0) {
     return (
       <div className="w-full max-w-xl mx-auto px-4 py-16">
-        <div className="retro-window p-8 text-center flex flex-col items-center gap-4 bg-white">
+        <div className="retro-pixel-window p-8 text-center flex flex-col items-center gap-4 bg-white rounded-2xl">
           <span className="text-4xl">🛍️</span>
-          <h1 className="text-lg font-mono font-bold text-[#3b2b4e]">
+          <h1 className="text-lg font-pixel-title font-bold text-[#3b2b4e]">
             Your bag is empty!
           </h1>
-          <p className="text-xs font-mono text-[#8e7ea8]">
+          <p className="text-xs font-pixel-body text-[#8e7ea8]">
             Please add your favorite press-on nail sets before checking out.
           </p>
           <Link
             href="/shop"
-            className="px-6 py-2.5 bg-[#fbcfe8] border-[1.5px] border-[#8e7ea8] rounded-sm font-mono text-xs font-bold text-[#3b2b4e] shadow-[2px_2px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white transition-all"
+            className="pixel-btn-pink px-6 py-2.5 rounded-xl text-xs"
           >
             SHOP NAIL SETS ♡
           </Link>
@@ -117,7 +117,7 @@ export default function CheckoutClient() {
           </div>
         </div>
 
-        <div className="p-4 bg-white border-b border-[#e2d5f1] flex items-center justify-between">
+        <div className="p-4 bg-white border-b-2 border-[#e2d5f1] flex items-center justify-between">
           <div>
             <h1 className="text-xl font-mono font-black text-[#3b2b4e]">
               Checkout &amp; Delivery
@@ -134,13 +134,13 @@ export default function CheckoutClient() {
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* Shipping Form */}
-        <div className="md:col-span-7 retro-window p-5 flex flex-col gap-4 bg-white">
-          <h2 className="text-xs font-mono font-bold uppercase text-[#4a3856] pb-2 border-b border-[#e2d5f1]">
+        <div className="md:col-span-7 retro-pixel-window p-5 flex flex-col gap-4 bg-white rounded-2xl">
+          <h2 className="text-xs font-pixel-title font-bold uppercase text-[#4a3856] pb-2 border-b-2 border-[#57446d]">
             1. Shipping Information
           </h2>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs font-mono font-bold text-[#6b5b82]">
+            <label className="text-xs font-pixel-title font-bold text-[#6b5b82]">
               Full Name *
             </label>
             <input
@@ -150,13 +150,13 @@ export default function CheckoutClient() {
               placeholder="e.g. Yasmin Alami"
               value={formData.fullName}
               onChange={handleInputChange}
-              className="border border-[#a79bbd] rounded-xs p-2 text-xs font-mono outline-none focus:border-[#db2777]"
+              className="border-2 border-[#57446d] rounded-xl p-2 text-xs font-pixel-body outline-none focus:border-[#db2777]"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-mono font-bold text-[#6b5b82]">
+              <label className="text-xs font-pixel-title font-bold text-[#6b5b82]">
                 WhatsApp / Phone *
               </label>
               <input
@@ -166,12 +166,12 @@ export default function CheckoutClient() {
                 placeholder="+212 6..."
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="border border-[#a79bbd] rounded-xs p-2 text-xs font-mono outline-none focus:border-[#db2777]"
+                className="border-2 border-[#57446d] rounded-xl p-2 text-xs font-pixel-body outline-none focus:border-[#db2777]"
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-mono font-bold text-zinc-600">
+              <label className="text-xs font-pixel-title font-bold text-zinc-600">
                 City / Region *
               </label>
               <input
@@ -181,13 +181,13 @@ export default function CheckoutClient() {
                 placeholder="Casablanca, Rabat, Marrakech..."
                 value={formData.city}
                 onChange={handleInputChange}
-                className="border border-[#a79bbd] rounded-xs p-2 text-xs font-mono outline-none focus:border-[#db2777]"
+                className="border-2 border-[#57446d] rounded-xl p-2 text-xs font-pixel-body outline-none focus:border-[#db2777]"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-xs font-mono font-bold text-[#6b5b82]">
+            <label className="text-xs font-pixel-title font-bold text-[#6b5b82]">
               Delivery Address *
             </label>
             <textarea
@@ -197,20 +197,20 @@ export default function CheckoutClient() {
               placeholder="Street address, neighborhood, apartment / villa number..."
               value={formData.address}
               onChange={handleInputChange}
-              className="border border-[#a79bbd] rounded-xs p-2 text-xs font-mono outline-none focus:border-[#db2777] resize-none"
+              className="border-2 border-[#57446d] rounded-xl p-2 text-xs font-pixel-body outline-none focus:border-[#db2777] resize-none"
             />
           </div>
 
-          <h2 className="text-xs font-mono font-bold uppercase text-[#4a3856] pt-2 pb-1 border-b border-[#e2d5f1]">
+          <h2 className="text-xs font-pixel-title font-bold uppercase text-[#4a3856] pt-2 pb-1 border-b-2 border-[#57446d]">
             2. Payment Method
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-pixel-title">
             <label
-              className={`p-2.5 border rounded-sm cursor-pointer flex flex-col gap-0.5 ${
+              className={`p-2.5 border-2 rounded-xl cursor-pointer flex flex-col gap-0.5 transition-all ${
                 formData.paymentMethod === 'cod'
-                  ? 'border-[#db2777] bg-[#fdf2f8]'
-                  : 'border-[#c4b5fd]'
+                  ? 'border-[#57446d] bg-[#fdf2f8] shadow-[2px_2px_0px_0px_#57446d]'
+                  : 'border-[#57446d] opacity-70 hover:opacity-100'
               }`}
             >
               <input
@@ -221,15 +221,15 @@ export default function CheckoutClient() {
                 onChange={() => setFormData((p) => ({ ...p, paymentMethod: 'cod' }))}
                 className="hidden"
               />
-              <span className="font-bold text-[#db2777]">Cash on Delivery</span>
-              <span className="text-[10px] text-[#8e7ea8]">Pay at your door</span>
+              <span className="font-bold text-[#db2777] text-[10px]">Cash on Delivery</span>
+              <span className="text-[9px] text-[#8e7ea8] font-pixel-body">Pay at your door</span>
             </label>
 
             <label
-              className={`p-2.5 border rounded-sm cursor-pointer flex flex-col gap-0.5 ${
+              className={`p-2.5 border-2 rounded-xl cursor-pointer flex flex-col gap-0.5 transition-all ${
                 formData.paymentMethod === 'whatsapp'
-                  ? 'border-[#25d366] bg-[#f0fdf4]'
-                  : 'border-[#c4b5fd]'
+                  ? 'border-[#57446d] bg-[#f0fdf4] shadow-[2px_2px_0px_0px_#57446d]'
+                  : 'border-[#57446d] opacity-70 hover:opacity-100'
               }`}
             >
               <input
@@ -240,15 +240,15 @@ export default function CheckoutClient() {
                 onChange={() => setFormData((p) => ({ ...p, paymentMethod: 'whatsapp' }))}
                 className="hidden"
               />
-              <span className="font-bold text-[#16a34a]">WhatsApp Order</span>
-              <span className="text-[10px] text-[#8e7ea8]">Direct concierge</span>
+              <span className="font-bold text-[#16a34a] text-[10px]">WhatsApp Order</span>
+              <span className="text-[9px] text-[#8e7ea8] font-pixel-body">Direct concierge</span>
             </label>
 
             <label
-              className={`p-2.5 border rounded-sm cursor-pointer flex flex-col gap-0.5 ${
+              className={`p-2.5 border-2 rounded-xl cursor-pointer flex flex-col gap-0.5 transition-all ${
                 formData.paymentMethod === 'card'
-                  ? 'border-[#8b5cf6] bg-[#faf5ff]'
-                  : 'border-[#c4b5fd]'
+                  ? 'border-[#57446d] bg-[#faf5ff] shadow-[2px_2px_0px_0px_#57446d]'
+                  : 'border-[#57446d] opacity-70 hover:opacity-100'
               }`}
             >
               <input
@@ -259,15 +259,15 @@ export default function CheckoutClient() {
                 onChange={() => setFormData((p) => ({ ...p, paymentMethod: 'card' }))}
                 className="hidden"
               />
-              <span className="font-bold text-[#7c3aed]">Credit Card</span>
-              <span className="text-[10px] text-[#8e7ea8]">Visa / Mastercard</span>
+              <span className="font-bold text-[#7c3aed] text-[10px]">Credit Card</span>
+              <span className="text-[9px] text-[#8e7ea8] font-pixel-body">Visa / Mastercard</span>
             </label>
           </div>
         </div>
 
         {/* Order Summary */}
-        <div className="md:col-span-5 retro-window p-5 flex flex-col gap-4 bg-white">
-          <h2 className="text-xs font-mono font-bold uppercase text-[#4a3856] pb-2 border-b border-[#e2d5f1]">
+        <div className="md:col-span-5 retro-pixel-window p-5 flex flex-col gap-4 bg-white rounded-2xl">
+          <h2 className="text-xs font-pixel-title font-bold uppercase text-[#4a3856] pb-2 border-b-2 border-[#57446d]">
             Order Summary
           </h2>
 
@@ -275,9 +275,9 @@ export default function CheckoutClient() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center gap-2.5 p-2 bg-[#fdf8fa] border border-[#fbcfe8] rounded-xs text-xs font-mono"
+                className="flex items-center gap-2.5 p-2 bg-[#fdf8fa] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d] text-xs font-pixel-body"
               >
-                <div className="relative w-12 h-12 bg-white border border-[#c4b5fd] rounded-xs shrink-0 overflow-hidden">
+                <div className="relative w-12 h-12 bg-white border-2 border-[#57446d] rounded-lg shrink-0 overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -287,42 +287,42 @@ export default function CheckoutClient() {
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="font-bold text-[#3b2b4e] block truncate">
+                  <span className="font-bold text-[#3b2b4e] block truncate font-pixel-title text-[11px]">
                     {item.name}
                   </span>
                   <span className="text-[10px] text-[#6b5b82] block">
                     {item.shape} • {item.length} • Size: {item.size}
                   </span>
                 </div>
-                <span className="font-bold text-[#3b2b4e] shrink-0">
+                <span className="font-bold text-[#3b2b4e] shrink-0 font-pixel">
                   {item.priceDH * item.quantity} DH
                 </span>
               </div>
             ))}
           </div>
 
-          <div className="p-2 bg-[#fdf2f8] border border-[#fbcfe8] rounded-xs text-[10px] font-mono text-[#db2777]">
+          <div className="p-2 bg-[#fdf2f8] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d] text-[10px] font-pixel-body text-[#db2777]">
             🎁 FREE Deluxe Application Kit included with every set!
           </div>
 
-          <div className="flex flex-col gap-1.5 pt-2 border-t border-[#e2d5f1] text-xs font-mono">
+          <div className="flex flex-col gap-1.5 pt-2 border-t-2 border-[#57446d] text-xs font-pixel-title">
             <div className="flex justify-between text-[#6b5b82]">
               <span>Subtotal:</span>
-              <span>{subtotalDH} DH</span>
+              <span className="font-pixel">{subtotalDH} DH</span>
             </div>
             <div className="flex justify-between text-[#6b5b82]">
               <span>Shipping:</span>
               <span className="text-emerald-600 font-bold">FREE ♡</span>
             </div>
-            <div className="flex justify-between text-sm font-black text-[#3b2b4e] pt-1.5 border-t border-[#f0e4fc]">
+            <div className="flex justify-between text-sm font-black text-[#3b2b4e] pt-1.5 border-t-2 border-[#f0e4fc]">
               <span>Total:</span>
-              <span className="text-[#db2777]">{subtotalDH} DH</span>
+              <span className="text-[#db2777] font-pixel">{subtotalDH} DH</span>
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3.5 bg-[#fbcfe8] border-[1.5px] border-[#8e7ea8] text-[#3b2b4e] rounded-sm font-mono text-xs font-black uppercase tracking-wider shadow-[2px_2px_0px_0px_#8e7ea8] hover:bg-[#f472b6] hover:text-white transition-all"
+            className="pixel-btn-pink w-full py-3.5 text-xs rounded-xl"
           >
             CONFIRM ORDER ♡
           </button>
