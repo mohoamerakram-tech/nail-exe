@@ -24,7 +24,6 @@ function generateNailsSvg(theme) {
 
   const isDark = theme === 'nightfall';
   const nailBg = isDark ? '#09090b' : theme === 'cyber' ? '#d8b4fe' : '#ffd1dc';
-  const nailAccent = isDark ? '#ffffff' : '#f472b6';
 
   return `
   <svg xmlns="http://www.w3.org/2000/svg" width="700" height="700" viewBox="0 0 700 700">

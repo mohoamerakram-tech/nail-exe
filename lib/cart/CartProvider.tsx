@@ -31,8 +31,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const freeShippingGoalDH = 450; // Free shipping over 450 DH (~$45)
 
   useEffect(() => {
-    setItems(loadCartFromStorage());
-    setIsMounted(true);
+    // Hydrate after the first paint so server and client render the same initial cart.
+    const frame = window.requestAnimationFrame(() => {
+      setItems(loadCartFromStorage());
+      setIsMounted(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {

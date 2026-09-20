@@ -1,20 +1,10 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Silkscreen, Pixelify_Sans, Press_Start_2P } from 'next/font/google';
+import { Silkscreen, Pixelify_Sans, Press_Start_2P } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/lib/cart/CartProvider';
 import { WishlistProvider } from '@/lib/cart/WishlistContext';
 import Navbar from '@/app/components/navigation/Navbar';
 import CartDrawer from '@/app/components/cart/CartDrawer';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 const silkscreen = Silkscreen({
   weight: ['400', '700'],
@@ -59,18 +49,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${pixelifySans.variable} ${silkscreen.variable} ${pressStart2P.variable} ${geistSans.variable} ${geistMono.variable}`}
+      className={`${pixelifySans.variable} ${silkscreen.variable} ${pressStart2P.variable}`}
     >
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&display=swap"
-        />
-      </head>
       <body
-        suppressHydrationWarning
         className="pixel-grid-bg text-[#4a3856] min-h-screen flex flex-col font-pixel-body selection:bg-[#f472b6] selection:text-white"
       >
         <WishlistProvider>

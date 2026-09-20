@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/lib/cart/CartProvider';
@@ -127,7 +127,7 @@ export default function CartDrawer() {
 
                   <div className="text-[10px] font-pixel-body text-[#6b5b82] mt-0.5 space-y-0.5">
                     <div>
-                      {item.shape.toUpperCase()} // {item.length.toUpperCase()}
+                      {item.shape.toUpperCase()} {'//'} {item.length.toUpperCase()}
                     </div>
                     <div>
                       SIZE: <span className="font-bold text-[#db2777] font-pixel">{item.size}</span>

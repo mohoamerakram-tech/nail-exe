@@ -6,7 +6,8 @@ export type NailSizePreset = 'XS' | 'S' | 'M' | 'L' | 'Custom';
 
 export type AdhesiveChoice = 'sticky-tabs' | 'liquid-glue' | 'both';
 
-export type NailVibe = 'all' | 'coquette' | 'alt-girl' | 'minimal' | 'custom-sets';
+export type NailVibe = 'coquette' | 'alt-girl' | 'minimal' | 'custom-sets';
+export type ShopVibe = NailVibe | 'all';
 
 export interface CustomFingerSizes {
   thumb: string;

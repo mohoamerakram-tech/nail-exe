@@ -1,4 +1,3 @@
-import React from 'react';
 import { notFound } from 'next/navigation';
 import { getProductBySlug, PRODUCTS } from '@/lib/products';
 import ProductDetailClient from './ProductDetailClient';
@@ -22,7 +21,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${product.name} // Walls Have Mouths Press On Nails`,
+    title: `${product.name} // NAIL.EXE Press On Nails`,
     description: product.tagline,
   };
 }

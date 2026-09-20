@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const FRAME_COUNT = 30;
 const HOVER_FRAME = 24; // Frame 25, using zero-based indexing.
@@ -32,7 +32,7 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
   const [reducedMotion, setReducedMotion] = useState(false);
   const active = hovered || focused || tapped;
 
-  // Viewport intersection observer: pause timer when scrolled away
+  // Pause the two-sequence player while the hero is off-screen.
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -46,7 +46,7 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
     return () => observer.disconnect();
   }, []);
 
-  // Preload Sequence 1 immediately on mount; defer Sequence 2 to idle time or hover
+  // Load the idle loop first, then prepare the hover greeting when the browser is idle.
   useEffect(() => {
     let cancelled = false;
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -54,7 +54,6 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
     syncPreference();
     preference.addEventListener('change', syncPreference);
 
-    // Preload only Sequence 1 first (cuts initial cat requests in half!)
     Promise.all(
       Array.from({ length: FRAME_COUNT }, (_, frame) => {
         const image = new window.Image();
@@ -65,7 +64,6 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
       .then(() => {
         if (!cancelled) {
           setReady(true);
-          // Queue Sequence 2 during browser idle time so it's ready when user reaches for it
           if ('requestIdleCallback' in window) {
             window.requestIdleCallback(preloadSequence2, { timeout: 1000 });
           } else {
@@ -83,23 +81,18 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
     };
   }, []);
 
-  // Ensure Sequence 2 is preloaded on hover/focus
-  const triggerSequence2 = useCallback(() => {
-    preloadSequence2();
-  }, []);
-
+  // Hover holds frame 25; on leave, finish sequence 2 before returning to sequence 1.
   useEffect(() => {
     if (!ready || !imageRef.current || !visible) return;
     const playback = playbackRef.current;
     if (active) {
-      triggerSequence2();
+      preloadSequence2();
       playback.sequence = 2;
       playback.frame = reducedMotion ? HOVER_FRAME : 0;
     } else if (reducedMotion) {
       playback.sequence = 1;
       playback.frame = 0;
     }
-    // On leave, preserve the current greeting frame and play out its ending.
     imageRef.current.src = frameUrl(playback.sequence, playback.frame);
     if (reducedMotion) return;
 
@@ -117,7 +110,7 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
       if (active && playback.frame === HOVER_FRAME) window.clearInterval(timer);
     }, FRAME_DURATION);
     return () => window.clearInterval(timer);
-  }, [active, ready, visible, reducedMotion, triggerSequence2]);
+  }, [active, ready, visible, reducedMotion]);
 
   return (
     <button
@@ -126,12 +119,12 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
       aria-label="Say hello to the cat"
       title="Hover to say hello ♡"
       onPointerEnter={(event) => {
-        triggerSequence2();
+        preloadSequence2();
         if (event.pointerType !== 'touch') setHovered(true);
       }}
       onPointerLeave={() => setHovered(false)}
       onFocus={(event) => {
-        triggerSequence2();
+        preloadSequence2();
         if (event.currentTarget.matches(':focus-visible')) setFocused(true);
       }}
       onBlur={() => {
@@ -140,7 +133,7 @@ export default function AnimatedCat({ className = '' }: { className?: string } =
       }}
       onPointerUp={(event) => {
         if (event.pointerType === 'touch') {
-          triggerSequence2();
+          preloadSequence2();
           setTapped((value) => !value);
         }
       }}

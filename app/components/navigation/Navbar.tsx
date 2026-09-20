@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/lib/cart/CartProvider';
@@ -11,7 +10,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const { itemCount, toggleCart } = useCart();
   const { wishlistCount } = useWishlist();
-  const [searchQuery, setSearchQuery] = useState('');
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[#fdf2f7] border-b-2 border-[#57446d]">
@@ -85,32 +83,27 @@ export default function Navbar() {
           >
             [ Vibes ]
           </Link>
-          <Link
-            href="/#faq"
-            className="px-3 py-1.5 text-[#57446d] border-2 border-transparent hover:border-[#57446d] hover:bg-[#fce7f3] hover:shadow-[2px_2px_0px_0px_#57446d] rounded-lg transition-all"
-          >
-            [ FAQ ]
-          </Link>
         </nav>
 
         {/* Right: Search, Wishlist & Cart Counter */}
         <div className="flex items-center gap-3">
-          {/* Quick Search Bar */}
-          <div className="hidden sm:flex items-center bg-white border-2 border-[#57446d] shadow-[2px_2px_0px_0px_#57446d] rounded-lg px-2.5 py-1 text-xs font-pixel-body">
-            <span className="text-[#db2777] mr-1.5 text-[10px]">🔍</span>
+          {/* Native GET form keeps search usable without client-side routing state. */}
+          <form action="/shop" role="search" className="hidden sm:flex items-center bg-white border-2 border-[#57446d] shadow-[2px_2px_0px_0px_#57446d] rounded-lg px-2.5 py-1 text-xs font-pixel-body">
+            <button type="submit" aria-label="Search nail sets" className="text-[#db2777] mr-1.5 text-[10px]">🔍</button>
             <input
-              type="text"
+              type="search"
+              name="q"
               placeholder="search nails..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-label="Search nail sets"
               className="bg-transparent text-[#3b2b4e] placeholder-[#a79bbd] outline-none w-24 lg:w-32 text-xs font-pixel-body"
             />
-          </div>
+          </form>
 
           {/* Wishlist Heart Icon */}
           <Link
-            href="/shop"
+            href="/wishlist"
             title="Wishlist"
+            aria-label="View wishlist"
             className="relative w-8 h-8 rounded-lg bg-white border-2 border-[#57446d] flex items-center justify-center text-sm text-[#db2777] hover:bg-[#fdf2f8] transition-all shadow-[2px_2px_0px_0px_#57446d] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
           >
             <span>♡</span>

@@ -1,9 +1,8 @@
-import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProductsByVibe } from '@/lib/products';
-import { NailVibe } from '@/lib/types';
-import ProductCard from '@/app/components/shop/ProductCard';
+import { getShopProducts, parseShopVibe, SHOP_VIBES } from '@/lib/products';
+import type { ShopVibe } from '@/lib/types';
+import ProductGrid from '@/app/components/shop/ProductGrid';
 
 export const metadata = {
   title: 'SHOP PRESS ON NAILS // NAIL.EXE',
@@ -13,20 +12,21 @@ export const metadata = {
 export default async function ShopPage({
   searchParams,
 }: {
-  searchParams: Promise<{ vibe?: string }>;
+  searchParams: Promise<{ vibe?: string | string[]; q?: string | string[] }>;
 }) {
   const resolvedParams = await searchParams;
-  const currentVibe = (resolvedParams?.vibe as NailVibe | 'all') || 'all';
+  const currentVibe = parseShopVibe(typeof resolvedParams.vibe === 'string' ? resolvedParams.vibe : undefined);
+  const query = typeof resolvedParams.q === 'string' ? resolvedParams.q.trim().slice(0, 100) : '';
+  const products = getShopProducts(currentVibe, query);
+  const vibeCategories: { id: ShopVibe; label: string }[] = [{ id: 'all', label: 'All Nails' }, ...SHOP_VIBES];
 
-  const products = getProductsByVibe(currentVibe);
-
-  const vibeCategories: { id: NailVibe | 'all'; label: string }[] = [
-    { id: 'all', label: 'All Nails' },
-    { id: 'coquette', label: 'Coquette' },
-    { id: 'alt-girl', label: 'Alt Girl' },
-    { id: 'minimal', label: 'Minimal' },
-    { id: 'custom-sets', label: 'Custom Sets' },
-  ];
+  // Keep the search term when switching categories so the filters compose.
+  const filterHref = (vibe: ShopVibe) => {
+    const params = new URLSearchParams();
+    if (vibe !== 'all') params.set('vibe', vibe);
+    if (query) params.set('q', query);
+    return params.size ? `/shop?${params}` : '/shop';
+  };
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -71,7 +71,7 @@ export default async function ShopPage({
         <div className="flex items-center justify-between border-b-2 border-[#57446d] pb-2">
           <div className="flex items-center gap-2">
             <h2 className="text-xl font-pixel-title text-[#3b2b4e]">
-              Shop All Sets
+              {query ? `Results for “${query}”` : 'Shop All Sets'}
             </h2>
             <span className="text-[#db2777] text-lg">♡</span>
           </div>
@@ -84,12 +84,12 @@ export default async function ShopPage({
         {/* Vibe Filter Tabs */}
         <div className="flex flex-wrap items-center gap-2">
           {vibeCategories.map((cat) => {
-            const isSelected =
-              cat.id === currentVibe || (cat.id === 'all' && (!currentVibe || currentVibe === 'all'));
+            const isSelected = cat.id === currentVibe;
             return (
               <Link
                 key={cat.id}
-                href={cat.id === 'all' ? '/shop' : `/shop?vibe=${cat.id}`}
+                href={filterHref(cat.id)}
+                aria-current={isSelected ? 'page' : undefined}
                 className={`px-3.5 py-1.5 rounded-lg border-2 text-xs font-pixel transition-all ${
                   isSelected
                     ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]'
@@ -102,12 +102,7 @@ export default async function ShopPage({
           })}
         </div>
 
-        {/* Product Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-2">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
+        <ProductGrid products={products} emptyMessage="Try another search or browse all handmade nail sets." />
 
         {/* Bottom Mascot Footer Note */}
         <div className="mt-8 pt-6 border-t-2 border-[#57446d] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-pixel text-[#57446d]">

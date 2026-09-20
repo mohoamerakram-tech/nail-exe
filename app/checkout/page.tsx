@@ -1,9 +1,8 @@
-import React from 'react';
 import CheckoutClient from './CheckoutClient';
 
 export const metadata = {
   title: 'SECURE CHECKOUT & DISPATCH // NAIL.EXE',
-  description: 'Finalize order allocation and dispatch queue for NAIL.EXE archival apparel and bespoke embroidery specimens.',
+  description: 'Review your handmade press-on nail sets and delivery details.',
 };
 
 export default function CheckoutPage() {

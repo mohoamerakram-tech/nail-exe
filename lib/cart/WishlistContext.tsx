@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface WishlistContextType {
   wishlist: string[];
+  isReady: boolean;
   toggleWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
   wishlistCount: number;
@@ -18,15 +19,20 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setWishlist(JSON.parse(stored));
+    // Hydrate after the first paint so saved hearts do not cause a hydration mismatch.
+    const frame = window.requestAnimationFrame(() => {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsed: unknown = JSON.parse(stored);
+          if (Array.isArray(parsed)) setWishlist(parsed.filter((id): id is string => typeof id === 'string'));
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (e) {
-      console.error(e);
-    }
-    setIsMounted(true);
+      setIsMounted(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
@@ -53,6 +59,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     <WishlistContext.Provider
       value={{
         wishlist,
+        isReady: isMounted,
         toggleWishlist,
         isInWishlist,
         wishlistCount: wishlist.length,

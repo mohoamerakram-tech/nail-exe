@@ -12,18 +12,21 @@ type Props = {
 
 const FRAME_COUNT = 30;
 const LAST_FRAME = FRAME_COUNT - 1;
+const FRAME_DURATION = 1000 / 12;
+const FULL_LOOP = { start: 0, end: LAST_FRAME };
+// Frame numbers in code are zero-based; sequence 4 loops 23–25 and sequence 7 loops 19–26.
 const ENDING_LOOPS: Partial<Record<Props['sequence'], { start: number; end: number }>> = {
-  4: { start: 22, end: 24 }, // guts_23–guts_25, zero-indexed.
-  7: { start: 18, end: 25 }, // guts_19–guts_26, zero-indexed.
+  4: { start: 22, end: 24 },
+  7: { start: 18, end: 25 },
 };
-const loopsAutomatically = (sequence: Props['sequence']) => sequence === 3 || sequence === 6;
-const loopsAfterHover = (sequence: Props['sequence']) => sequence === 8;
-const loopsFullSequence = (sequence: Props['sequence']) => loopsAutomatically(sequence) || loopsAfterHover(sequence);
 const frameUrl = (sequence: number, frame: number) =>
   `/images/home-animations/sequence${sequence}/guts_${String(frame + 1).padStart(2, '0')}.webp`;
 
 export default function HomeAnimation({ sequence, label, alt }: Props) {
-  const endingLoop = ENDING_LOOPS[sequence];
+  const startsAutomatically = sequence === 3 || sequence === 6;
+  // Sequence 5 plays once; the others loop either from frame 1 or from a custom ending.
+  const loop = ENDING_LOOPS[sequence] ?? (sequence === 5 ? null : FULL_LOOP);
+  const lastFrame = loop?.end ?? LAST_FRAME;
   const rootRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const frameRef = useRef(0);
@@ -33,6 +36,7 @@ export default function HomeAnimation({ sequence, label, alt }: Props) {
   const [reducedMotion, setReducedMotion] = useState(false);
   const [started, setStarted] = useState(false);
 
+  // Preload as the player approaches the viewport, and pause playback while it is off-screen.
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -56,80 +60,59 @@ export default function HomeAnimation({ sequence, label, alt }: Props) {
     };
   }, []);
 
-  // Progressive batch preloading: load frame 0 first, then stream remaining frames in chunks of 5
+  // Show the first frame as soon as it decodes, then preload the rest in small batches.
   useEffect(() => {
     if (!nearby || reducedMotion) return;
     let cancelled = false;
-    const count = endingLoop ? endingLoop.end + 1 : FRAME_COUNT;
-
-    // Load initial frame first
-    const firstImg = new window.Image();
-    firstImg.src = frameUrl(sequence, 0);
-    firstImg.decode().then(() => {
-      if (!cancelled) setReady(true);
-    }).catch(() => {
-      if (!cancelled) setReady(true);
-    });
-
-    // Stream the rest in small batches of 5
-    let currentIdx = 1;
-    const loadNextBatch = () => {
-      if (cancelled || currentIdx >= count) return;
-      const batchEnd = Math.min(count, currentIdx + 5);
-      const promises = [];
-      for (let f = currentIdx; f < batchEnd; f++) {
-        const img = new window.Image();
-        img.src = frameUrl(sequence, f);
-        promises.push(img.decode().catch(() => {}));
-      }
-      currentIdx = batchEnd;
-      if (currentIdx < count) {
-        if ('requestIdleCallback' in window) {
-          window.requestIdleCallback(loadNextBatch, { timeout: 150 });
-        } else {
-          setTimeout(loadNextBatch, 50);
-        }
-      }
+    const loadFrame = (frame: number) => {
+      const image = new window.Image();
+      image.src = frameUrl(sequence, frame);
+      return image.decode().catch(() => {});
     };
 
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(loadNextBatch, { timeout: 80 });
-    } else {
-      setTimeout(loadNextBatch, 40);
-    }
+    const preload = async () => {
+      await loadFrame(0);
+      if (cancelled) return;
+      setReady(true);
+      for (let first = 1; first <= lastFrame; first += 5) {
+        const count = Math.min(5, lastFrame - first + 1);
+        await Promise.all(Array.from({ length: count }, (_, offset) => loadFrame(first + offset)));
+        if (cancelled) return;
+      }
+    };
+    void preload();
 
     return () => { cancelled = true; };
-  }, [nearby, reducedMotion, sequence, endingLoop]);
+  }, [nearby, reducedMotion, sequence, lastFrame]);
 
+  // Hover-triggered cats show their final pose when the user prefers reduced motion.
   useEffect(() => {
-    if (!loopsAutomatically(sequence) && started && reducedMotion && imageRef.current) {
-      imageRef.current.src = frameUrl(sequence, endingLoop?.end ?? LAST_FRAME);
+    if (!startsAutomatically && started && reducedMotion && imageRef.current) {
+      imageRef.current.src = frameUrl(sequence, lastFrame);
     }
-  }, [sequence, started, reducedMotion, endingLoop]);
+  }, [sequence, started, reducedMotion, startsAutomatically, lastFrame]);
 
-  // Animation playback timer - only runs when visible in the viewport!
+  // Run one timer per visible player; its loop range determines whether it repeats or stops.
   useEffect(() => {
     if (!ready || !visible || reducedMotion) return;
-    if (!loopsAutomatically(sequence) && !started) return;
-    if (!loopsFullSequence(sequence) && !endingLoop && frameRef.current >= LAST_FRAME) return;
+    if (!startsAutomatically && !started) return;
+    if (!loop && frameRef.current >= lastFrame) return;
 
-    // Repaint current frame when scrolled back into view
+    // Restore the current frame after scrolling back into view.
     if (imageRef.current) {
       imageRef.current.src = frameUrl(sequence, frameRef.current);
     }
 
     const timer = window.setInterval(() => {
       if (document.hidden) return;
-      frameRef.current = loopsFullSequence(sequence)
-        ? (frameRef.current + 1) % FRAME_COUNT
-        : endingLoop
-          ? (frameRef.current >= endingLoop.end ? endingLoop.start : frameRef.current + 1)
-          : Math.min(frameRef.current + 1, LAST_FRAME);
+      frameRef.current = frameRef.current >= lastFrame
+        ? (loop?.start ?? lastFrame)
+        : frameRef.current + 1;
       if (imageRef.current) imageRef.current.src = frameUrl(sequence, frameRef.current);
-      if (!loopsFullSequence(sequence) && !endingLoop && frameRef.current === LAST_FRAME) window.clearInterval(timer);
-    }, 1000 / 12);
+      if (!loop && frameRef.current === lastFrame) window.clearInterval(timer);
+    }, FRAME_DURATION);
     return () => window.clearInterval(timer);
-  }, [ready, visible, reducedMotion, sequence, started, endingLoop]);
+  }, [ready, visible, reducedMotion, sequence, started, startsAutomatically, loop, lastFrame]);
 
   const artwork = (
     <Image ref={imageRef} src={frameUrl(sequence, 0)} alt={alt}
@@ -138,7 +121,7 @@ export default function HomeAnimation({ sequence, label, alt }: Props) {
 
   return (
     <div ref={rootRef} className={styles.player}>
-      {!loopsAutomatically(sequence) ? (
+      {!startsAutomatically ? (
         <button
           type="button"
           className={styles.trigger}

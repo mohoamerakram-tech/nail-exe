@@ -1,4 +1,16 @@
-import { Product, NailVibe, NailShape, NailLength } from './types';
+import type { Product, NailVibe, NailShape, NailLength, ShopVibe } from './types';
+
+// Shop and homepage category links share one set of ids, labels, and images.
+export const SHOP_VIBES: { id: NailVibe; label: string; image: string }[] = [
+  { id: 'coquette', label: 'Coquette', image: '/images/nails/coquette-bow.jpg' },
+  { id: 'alt-girl', label: 'Alt Girl', image: '/images/nails/nightfall.jpg' },
+  { id: 'minimal', label: 'Minimal', image: '/images/nails/little-hearts.jpg' },
+  { id: 'custom-sets', label: 'Custom Sets', image: '/images/nails/it-girl.jpg' },
+];
+
+export function parseShopVibe(value: string | undefined): ShopVibe {
+  return SHOP_VIBES.find((vibe) => vibe.id === value)?.id ?? 'all';
+}
 
 export const ALL_SHAPES: { id: NailShape; name: string; icon: string }[] = [
   { id: 'almond', name: 'Almond', icon: '🌰' },
@@ -202,9 +214,11 @@ export function getProductBySlug(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
 }
 
-export function getProductsByVibe(vibe?: NailVibe | 'all'): Product[] {
-  if (!vibe || vibe === 'all') {
-    return PRODUCTS;
-  }
-  return PRODUCTS.filter((p) => p.vibe === vibe);
+export function getShopProducts(vibe: ShopVibe, query = ''): Product[] {
+  const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  return PRODUCTS.filter((product) => {
+    if (vibe !== 'all' && product.vibe !== vibe) return false;
+    const searchable = `${product.name} ${product.vibe} ${product.tagline} ${product.description}`.toLowerCase();
+    return terms.every((term) => searchable.includes(term));
+  });
 }
