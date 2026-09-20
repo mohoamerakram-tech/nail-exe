@@ -11,8 +11,8 @@ interface InteractiveLogoProps {
 const FRAME_COUNT = 60;
 const LOOP_DURATION_MS = 6000; // 6 seconds for every complete loop
 const FRAME_DURATION = LOOP_DURATION_MS / FRAME_COUNT; // 100ms per frame (10 FPS)
-const CANVAS_WIDTH = 960;
-const CANVAS_HEIGHT = 540;
+const CANVAS_WIDTH = 720;
+const CANVAS_HEIGHT = 405;
 
 const getFrameUrl = (frameIndex: number) =>
   `/images/moving-logo/optimized/guts_${String(frameIndex + 1).padStart(2, '0')}.webp`;
@@ -25,19 +25,40 @@ const listeners: (() => void)[] = [];
 function initImageCache() {
   if (typeof window === 'undefined' || imageCache.length > 0) return;
 
-  let loadedCount = 0;
-  for (let i = 0; i < FRAME_COUNT; i++) {
-    const img = new window.Image();
-    img.src = getFrameUrl(i);
-    img.onload = () => {
-      loadedCount++;
-      if (loadedCount >= 1 && !cacheLoaded) {
-        cacheLoaded = true;
-        listeners.forEach((fn) => fn());
+  // 1. Immediately load frame 0 for instant initial paint
+  const firstImg = new window.Image();
+  firstImg.src = getFrameUrl(0);
+  firstImg.onload = () => {
+    cacheLoaded = true;
+    listeners.forEach((fn) => fn());
+  };
+  firstImg.decode().catch(() => {});
+  imageCache[0] = firstImg;
+
+  // 2. Progressively stream the remaining frames in batches of 6 (matching browser concurrent connections)
+  let nextIndex = 1;
+  const loadBatch = () => {
+    const end = Math.min(FRAME_COUNT, nextIndex + 6);
+    for (let i = nextIndex; i < end; i++) {
+      const img = new window.Image();
+      img.src = getFrameUrl(i);
+      img.decode().catch(() => {});
+      imageCache[i] = img;
+    }
+    nextIndex = end;
+    if (nextIndex < FRAME_COUNT) {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadBatch, { timeout: 150 });
+      } else {
+        setTimeout(loadBatch, 50);
       }
-    };
-    img.decode().catch(() => {});
-    imageCache[i] = img;
+    }
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(loadBatch, { timeout: 80 });
+  } else {
+    setTimeout(loadBatch, 40);
   }
 }
 
@@ -45,6 +66,7 @@ export default function InteractiveLogo({
   className = '',
   variant = 'navbar',
 }: InteractiveLogoProps) {
+  const isNav = variant === 'navbar';
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef(0);
@@ -53,11 +75,11 @@ export default function InteractiveLogo({
   const idleResumeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const rafRef = useRef<number | null>(null);
 
+  const [inView, setInView] = useState(isNav); // Navbar is sticky top, always in view
   const [isHovered, setIsHovered] = useState(false);
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [isReady, setIsReady] = useState(false);
 
   // Fast GPU canvas paint function
   const renderFrameToCanvas = useCallback((frameIndex: number) => {
@@ -67,7 +89,7 @@ export default function InteractiveLogo({
     if (!ctx) return;
 
     const clamped = ((frameIndex % FRAME_COUNT) + FRAME_COUNT) % FRAME_COUNT;
-    const img = imageCache[clamped];
+    const img = imageCache[clamped] || imageCache[0];
     if (img && img.complete && img.naturalWidth > 0) {
       ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     }
@@ -86,12 +108,27 @@ export default function InteractiveLogo({
     [renderFrameToCanvas]
   );
 
+  // Viewport intersection observer: pause hero logo when scrolled out of view
+  useEffect(() => {
+    if (isNav) return;
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+      },
+      { rootMargin: '120px' }
+    );
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [isNav]);
+
   // Initialize cache and initial paint
   useEffect(() => {
     initImageCache();
 
     const checkReady = () => {
-      setIsReady(true);
       renderFrameToCanvas(frameRef.current);
     };
 
@@ -113,14 +150,16 @@ export default function InteractiveLogo({
     };
   }, [renderFrameToCanvas]);
 
-  // Paint initial frame when canvas mounts
+  // Paint initial frame when canvas mounts or becomes visible
   useEffect(() => {
-    renderFrameToCanvas(0);
-  }, [renderFrameToCanvas]);
+    if (inView) {
+      renderFrameToCanvas(frameRef.current);
+    }
+  }, [inView, renderFrameToCanvas]);
 
-  // Snappy auto-play loop (18 fps)
+  // Snappy auto-play loop (only runs when element is actually in view!)
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || !inView) return;
 
     const interval = setInterval(() => {
       if (document.hidden) return;
@@ -132,7 +171,7 @@ export default function InteractiveLogo({
     }, FRAME_DURATION);
 
     return () => clearInterval(interval);
-  }, [reducedMotion, setFrame]);
+  }, [reducedMotion, inView, setFrame]);
 
   // Handle pointer enter
   const handlePointerEnter = useCallback(() => {
@@ -160,7 +199,7 @@ export default function InteractiveLogo({
     }
   }, []);
 
-  // Ultra-responsive 60 FPS mouse scrub + 3D tilt
+  // Ultra-responsive mouse scrub + 3D tilt
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       const container = containerRef.current;
@@ -175,7 +214,7 @@ export default function InteractiveLogo({
       const normX = Math.max(0, Math.min(1, rawX / rect.width));
       const normY = Math.max(0, Math.min(1, rawY / rect.height));
 
-      // 1:1 scrub: horizontally maps directly to frames 0..29
+      // 1:1 scrub: horizontally maps directly to frames 0..59
       const targetFrame = Math.min(
         FRAME_COUNT - 1,
         Math.max(0, Math.floor(normX * FRAME_COUNT))
@@ -193,7 +232,7 @@ export default function InteractiveLogo({
       const tiltY = (normX - 0.5) * 14;
       setTilt({ rotateX: tiltX, rotateY: tiltY });
 
-      // If user holds cursor still inside for >400ms, resume auto-play smoothly
+      // If user holds cursor still inside for >350ms, resume auto-play smoothly
       if (idleResumeTimerRef.current) {
         clearTimeout(idleResumeTimerRef.current);
       }
@@ -201,12 +240,10 @@ export default function InteractiveLogo({
         if (isHoveredRef.current) {
           isStationaryRef.current = true;
         }
-      }, 400);
+      }, 350);
     },
     [setFrame]
   );
-
-  const isNav = variant === 'navbar';
 
   return (
     <Link

@@ -41,7 +41,7 @@ export default function HomeAnimation({ sequence, label, alt }: Props) {
         setNearby(true);
         preloadObserver.disconnect();
       }
-    }, { rootMargin: '200px' });
+    }, { rootMargin: '150px' });
     const visibilityObserver = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
     preloadObserver.observe(root);
     visibilityObserver.observe(root);
@@ -56,17 +56,48 @@ export default function HomeAnimation({ sequence, label, alt }: Props) {
     };
   }, []);
 
+  // Progressive batch preloading: load frame 0 first, then stream remaining frames in chunks of 5
   useEffect(() => {
     if (!nearby || reducedMotion) return;
     let cancelled = false;
     const count = endingLoop ? endingLoop.end + 1 : FRAME_COUNT;
-    Promise.all(Array.from({ length: count }, (_, frame) => {
-      const image = new window.Image();
-      image.src = frameUrl(sequence, frame);
-      return image.decode();
-    })).then(() => {
+
+    // Load initial frame first
+    const firstImg = new window.Image();
+    firstImg.src = frameUrl(sequence, 0);
+    firstImg.decode().then(() => {
       if (!cancelled) setReady(true);
-    }).catch(() => { /* Leave the first frame visible if an asset fails. */ });
+    }).catch(() => {
+      if (!cancelled) setReady(true);
+    });
+
+    // Stream the rest in small batches of 5
+    let currentIdx = 1;
+    const loadNextBatch = () => {
+      if (cancelled || currentIdx >= count) return;
+      const batchEnd = Math.min(count, currentIdx + 5);
+      const promises = [];
+      for (let f = currentIdx; f < batchEnd; f++) {
+        const img = new window.Image();
+        img.src = frameUrl(sequence, f);
+        promises.push(img.decode().catch(() => {}));
+      }
+      currentIdx = batchEnd;
+      if (currentIdx < count) {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadNextBatch, { timeout: 150 });
+        } else {
+          setTimeout(loadNextBatch, 50);
+        }
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(loadNextBatch, { timeout: 80 });
+    } else {
+      setTimeout(loadNextBatch, 40);
+    }
+
     return () => { cancelled = true; };
   }, [nearby, reducedMotion, sequence, endingLoop]);
 
@@ -76,10 +107,16 @@ export default function HomeAnimation({ sequence, label, alt }: Props) {
     }
   }, [sequence, started, reducedMotion, endingLoop]);
 
+  // Animation playback timer - only runs when visible in the viewport!
   useEffect(() => {
     if (!ready || !visible || reducedMotion) return;
     if (!loopsAutomatically(sequence) && !started) return;
     if (!loopsFullSequence(sequence) && !endingLoop && frameRef.current >= LAST_FRAME) return;
+
+    // Repaint current frame when scrolled back into view
+    if (imageRef.current) {
+      imageRef.current.src = frameUrl(sequence, frameRef.current);
+    }
 
     const timer = window.setInterval(() => {
       if (document.hidden) return;
