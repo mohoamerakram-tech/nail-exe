@@ -214,9 +214,9 @@ export function getProductBySlug(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
 }
 
-export function getShopProducts(vibe: ShopVibe, query = ''): Product[] {
+export function getShopProducts(vibe: ShopVibe, query = '', products: Product[] = PRODUCTS): Product[] {
   const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
-  return PRODUCTS.filter((product) => {
+  return products.filter((product) => {
     if (vibe !== 'all' && product.vibe !== vibe) return false;
     const searchable = `${product.name} ${product.vibe} ${product.tagline} ${product.description}`.toLowerCase();
     return terms.every((term) => searchable.includes(term));

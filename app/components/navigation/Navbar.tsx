@@ -83,6 +83,12 @@ export default function Navbar() {
           >
             [ Vibes ]
           </Link>
+          <Link
+            href="/custom-studio"
+            className={`px-3 py-1.5 rounded-lg border-2 transition-all ${pathname === '/custom-studio' ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]' : 'text-[#57446d] border-transparent hover:border-[#57446d] hover:bg-[#fce7f3]'}`}
+          >
+            [ Studio ]
+          </Link>
         </nav>
 
         {/* Right: Search, Wishlist & Cart Counter */}

@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { getShopProducts, parseShopVibe, SHOP_VIBES } from '@/lib/products';
 import type { ShopVibe } from '@/lib/types';
 import ProductGrid from '@/app/components/shop/ProductGrid';
+import { getPublicProducts } from '@/lib/catalog/server';
 
 export const metadata = {
   title: 'SHOP PRESS ON NAILS // NAIL.EXE',
   description: 'Handmade salon-quality reusable press-on nails. Coquette, Alt Girl, Minimal, and Custom sets.',
 };
+export const dynamic = 'force-dynamic';
 
 export default async function ShopPage({
   searchParams,
@@ -17,7 +19,7 @@ export default async function ShopPage({
   const resolvedParams = await searchParams;
   const currentVibe = parseShopVibe(typeof resolvedParams.vibe === 'string' ? resolvedParams.vibe : undefined);
   const query = typeof resolvedParams.q === 'string' ? resolvedParams.q.trim().slice(0, 100) : '';
-  const products = getShopProducts(currentVibe, query);
+  const products = getShopProducts(currentVibe, query, await getPublicProducts());
   const vibeCategories: { id: ShopVibe; label: string }[] = [{ id: 'all', label: 'All Nails' }, ...SHOP_VIBES];
 
   // Keep the search term when switching categories so the filters compose.

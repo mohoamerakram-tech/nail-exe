@@ -3,11 +3,11 @@
 import Link from 'next/link';
 import ProductGrid from '@/app/components/shop/ProductGrid';
 import { useWishlist } from '@/lib/cart/WishlistContext';
-import { PRODUCTS } from '@/lib/products';
+import type { Product } from '@/lib/types';
 
-export default function WishlistClient() {
+export default function WishlistClient({ products: catalogProducts }: { products: Product[] }) {
   const { wishlist, isReady } = useWishlist();
-  const products = PRODUCTS.filter((product) => wishlist.includes(product.id));
+  const products = catalogProducts.filter((product) => wishlist.includes(product.id));
 
   return (
     <div className="w-full max-w-5xl mx-auto px-3 sm:px-6 py-8 flex flex-col gap-6">

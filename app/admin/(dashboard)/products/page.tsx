@@ -1,0 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
+import Link from 'next/link';
+import { getCatalogState } from '@/lib/catalog/server';
+import { getProductStock } from '@/lib/types';
+import DeleteButton from '../../components/DeleteButton';
+
+export const metadata = { title: 'Products // NAIL.EXE Admin' };
+export default async function AdminProductsPage() {
+  const { products } = await getCatalogState();
+  return <main><div className="mb-7 flex flex-wrap items-end justify-between gap-4 border-b-2 border-[#57446d] pb-5"><div><p className="font-pixel text-[9px] text-[#db2777]">CATALOGUE ♡</p><h1 className="mt-2 font-pixel-title text-3xl">Nail sets</h1></div><Link href="/admin/products/new" className="pixel-btn-pink rounded-xl px-5 py-3 text-xs">+ Add product</Link></div><div className="space-y-4">{products.map((product) => { const stock = getProductStock(product); return <article key={product.id} className="pixel-card grid gap-4 rounded-2xl bg-white p-4 sm:grid-cols-[90px_1fr_auto] sm:items-center"><img src={product.images[0]} alt="" className="h-24 w-24 rounded-xl border-2 border-[#57446d] object-cover" /><div><div className="flex flex-wrap gap-2"><span className="rounded-md bg-[#fbcfe8] px-2 py-1 font-pixel text-[8px]">{product.vibe}</span><span className={`rounded-md px-2 py-1 font-pixel text-[8px] ${product.status === 'draft' ? 'bg-amber-200' : 'bg-emerald-100'}`}>{product.status || 'active'}</span>{stock <= 0 && <span className="rounded-md bg-red-600 px-2 py-1 font-pixel text-[8px] text-white">SOLD OUT</span>}</div><h2 className="mt-2 font-pixel-title text-base">{product.name}</h2><p className="mt-1 text-xs text-[#6b5b82]">{product.sku || 'NO SKU'} · {product.priceDH} DH · {stock === Number.MAX_SAFE_INTEGER ? 'available' : `${stock} units`}</p></div><div className="flex flex-wrap gap-2"><Link href={`/shop/${product.slug}`} target="_blank" className="rounded-lg border-2 border-[#57446d] px-3 py-2 font-pixel text-[9px]">View ↗</Link><Link href={`/admin/products/${encodeURIComponent(product.id)}/edit`} className="rounded-lg border-2 border-[#57446d] bg-[#57446d] px-3 py-2 font-pixel text-[9px] text-white">Edit</Link><DeleteButton endpoint={`/api/admin/products/${encodeURIComponent(product.id)}`} label={product.name} /></div></article>; })}</div></main>;
+}

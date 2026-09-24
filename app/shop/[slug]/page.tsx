@@ -1,12 +1,8 @@
 import { notFound } from 'next/navigation';
-import { getProductBySlug, PRODUCTS } from '@/lib/products';
+import { getPublicProductBySlug } from '@/lib/catalog/server';
 import ProductDetailClient from './ProductDetailClient';
 
-export async function generateStaticParams() {
-  return PRODUCTS.map((product) => ({
-    slug: product.slug,
-  }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -14,7 +10,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
-  const product = getProductBySlug(resolvedParams.slug);
+  const product = await getPublicProductBySlug(resolvedParams.slug);
 
   if (!product) {
     return { title: 'PRODUCT NOT FOUND // NAIL.EXE' };
@@ -32,7 +28,7 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
-  const product = getProductBySlug(resolvedParams.slug);
+  const product = await getPublicProductBySlug(resolvedParams.slug);
 
   if (!product) {
     notFound();

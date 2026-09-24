@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/lib/types';
 import { useWishlist } from '@/lib/cart/WishlistContext';
+import { getProductStock } from '@/lib/types';
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +13,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const isFav = isInWishlist(product.id);
+  const soldOut = getProductStock(product) <= 0;
 
   return (
     <div className="group pixel-card rounded-xl transition-all flex flex-col justify-between overflow-hidden">
@@ -33,6 +35,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             ★ BESTSELLER
           </span>
         )}
+        {soldOut && <span className="absolute inset-x-3 top-1/2 -translate-y-1/2 rounded-lg border-2 border-[#57446d] bg-white/95 px-3 py-2 text-center font-pixel-title text-[10px] text-[#be185d] shadow-[2px_2px_0_#57446d]">SOLD OUT</span>}
 
         {/* Floating Mini Vibe Tag */}
         <span className="absolute bottom-2 right-2 px-1.5 py-0.5 font-pixel-arcade text-[7px] bg-white/95 text-[#57446d] border-[1.5px] border-[#57446d] rounded-md shadow-[1.5px_1.5px_0px_0px_#57446d]">

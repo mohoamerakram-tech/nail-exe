@@ -1,0 +1,13 @@
+'use client';
+
+/* eslint-disable @next/next/no-img-element */
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import type { StudioLogo } from '@/lib/types';
+import { Area, Field, inputClass, Section } from './AdminFormFields';
+
+export default function LogoForm({ logo }: { logo?: StudioLogo }) {
+  const router = useRouter(); const [pending, setPending] = useState(false); const [error, setError] = useState('');
+  async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setPending(true); setError(''); const response = await fetch(logo ? `/api/admin/logos/${encodeURIComponent(logo.id)}` : '/api/admin/logos', { method: logo ? 'PUT' : 'POST', body: new FormData(event.currentTarget) }); const result = await response.json().catch(() => ({})) as { error?: string }; if (!response.ok) { setError(result.error || 'Logo could not be saved.'); setPending(false); return; } router.push('/admin/logos'); router.refresh(); }
+  return <form onSubmit={submit} encType="multipart/form-data" className="space-y-6"><Section title="Custom-studio logo"><div className="grid gap-5 md:grid-cols-2"><Field name="label" title="Logo name *" defaultValue={logo?.label} required /><Field name="id" title="Logo ID" defaultValue={logo?.id} readOnly={Boolean(logo)} placeholder="generated-from-name" /><Field name="sortOrder" title="Picker order" type="number" min="0" defaultValue={logo?.sortOrder ?? 0} /><label className="flex items-center gap-3 self-end rounded-xl border-2 border-[#e9d5ff] p-3 text-sm"><input type="checkbox" name="active" defaultChecked={logo?.active ?? true} className="h-4 w-4 accent-[#db2777]" />Visible in custom studio</label><Area name="description" title="Customer description" defaultValue={logo?.description} /> <label className="font-pixel-title text-[10px]">{logo ? 'Replace artwork' : 'Logo artwork *'}<input name="image" type="file" accept="image/png,image/jpeg,image/webp" required={!logo} className={inputClass} /></label></div>{logo && <div className="mt-5"><p className="mb-2 font-pixel-title text-[9px]">CURRENT ARTWORK</p><img src={logo.image} alt={logo.label} className="h-32 w-32 rounded-xl border-2 border-[#57446d] bg-[#fff5f7] object-contain p-2" /></div>}</Section>{error && <p role="alert" className="rounded-xl border-2 border-red-500 bg-red-50 p-4 text-sm text-red-800">{error}</p>}<div className="flex gap-3"><button disabled={pending} className="pixel-btn-pink rounded-xl px-6 py-3 text-xs">{pending ? 'SAVING…' : '[ SAVE LOGO ➔ ]'}</button><button type="button" onClick={() => router.push('/admin/logos')} className="pixel-card rounded-xl bg-white px-5 py-3 font-pixel text-xs">Cancel</button></div></form>;
+}

@@ -1,14 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { PRODUCTS, SHOP_VIBES } from '@/lib/products';
+import { SHOP_VIBES } from '@/lib/products';
+import { getPublicProducts, getPublicPromotions } from '@/lib/catalog/server';
 import ProductCard from '@/app/components/shop/ProductCard';
 import InteractiveLogo from '@/app/components/navigation/InteractiveLogo';
 import AnimatedCat from '@/app/components/home/AnimatedCat';
 import HomeAnimation from '@/app/components/home/HomeAnimation';
+import HeroPromotions from '@/app/components/home/HeroPromotions';
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
   // Keep the homepage grid short; the full catalog lives on /shop.
-  const featuredProducts = PRODUCTS.slice(0, 6);
+  const [products, promotions] = await Promise.all([getPublicProducts(), getPublicPromotions()]);
+  const featuredProducts = [...products].sort((a, b) => Number(Boolean(b.featured || b.isBestSeller)) - Number(Boolean(a.featured || a.isBestSeller))).slice(0, 6);
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -29,7 +34,7 @@ export default function HomePage() {
           </div>
 
           {/* Layer the hand, desktop decorations, and interactive kitten inside one window. */}
-          <div className="relative w-full h-[380px] sm:h-[480px] overflow-hidden bg-gradient-to-b from-[#bce0fd] via-[#fce7f3] to-[#fdf4f7] pixel-grid-canvas">
+          <div className="relative h-[550px] w-full overflow-hidden bg-gradient-to-b from-[#bce0fd] via-[#fce7f3] to-[#fdf4f7] pixel-grid-canvas sm:h-[480px]">
             <div className="absolute inset-0 pointer-events-none opacity-80">
               <div className="absolute -top-10 -left-10 w-64 h-48 bg-white/70 rounded-full blur-xl" />
               <div className="absolute top-10 right-10 w-80 h-56 bg-white/70 rounded-full blur-xl" />
@@ -63,16 +68,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="absolute inset-y-0 right-0 sm:right-16 w-[340px] sm:w-[480px] z-10 pointer-events-none">
-              <Image
-                src="/images/nails/hero-hand.jpg"
-                alt="Model hand wearing press on nails"
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 500px"
-                className="object-contain object-bottom sm:object-center"
-              />
-            </div>
+            {/* Latest campaigns rotate here; edit lib/promotions.ts to publish a new one. */}
+            <HeroPromotions promotions={promotions} />
 
             <div className="hidden lg:flex absolute top-8 right-6 z-20 flex-col gap-3">
               {[

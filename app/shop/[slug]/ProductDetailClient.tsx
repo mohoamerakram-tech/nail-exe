@@ -10,6 +10,8 @@ import {
   NailSizePreset,
   AdhesiveChoice,
   CustomFingerSizes,
+  getProductStock,
+  getSizeStock,
 } from '@/lib/types';
 import { ALL_SHAPES, ALL_LENGTHS } from '@/lib/products';
 import { useCart } from '@/lib/cart/CartProvider';
@@ -27,7 +29,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedShape, setSelectedShape] = useState<NailShape>(product.shapes[0] || 'almond');
   const [selectedLength, setSelectedLength] = useState<NailLength>(product.lengths[0] || 'medium');
-  const [selectedSize, setSelectedSize] = useState<NailSizePreset>('S');
+  const [selectedSize, setSelectedSize] = useState<NailSizePreset>(() =>
+    (['XS', 'S', 'M', 'L', 'Custom'] as const).find((size) => getSizeStock(product, size) > 0) ?? 'S'
+  );
   const [customSizes, setCustomSizes] = useState<CustomFingerSizes>({
     thumb: '15',
     index: '12',
@@ -42,8 +46,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
   const isFav = isInWishlist(product.id);
   const activeImage = product.images[activeImageIndex] || product.images[0];
+  const soldOut = getProductStock(product) <= 0;
+  const selectedSizeSoldOut = getSizeStock(product, selectedSize) <= 0;
 
   const handleAddToCart = () => {
+    if (soldOut || selectedSizeSoldOut) return;
     addItem({
       id: `${product.id}-${selectedShape}-${selectedLength}-${selectedSize}-${Date.now()}`,
       productId: product.id,
@@ -156,8 +163,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <span className="text-xs font-pixel-arcade text-[#8e7ea8]">
                 (~${product.priceUSD} USD)
               </span>
-              <span className="text-[10px] font-pixel-arcade text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md border-2 border-[#57446d] shadow-[1.5px_1.5px_0px_0px_#57446d] ml-auto">
-                In Stock &amp; Ready to Ship
+              <span className={`text-[10px] font-pixel-arcade px-2 py-1 rounded-md border-2 border-[#57446d] shadow-[1.5px_1.5px_0px_0px_#57446d] ml-auto ${soldOut ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                {soldOut ? 'Sold out' : `${getProductStock(product)} available`}
               </span>
             </div>
             <p className="text-xs font-pixel-body text-[#6b5b82] mt-1">
@@ -233,10 +240,13 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   key={sz}
                   type="button"
                   onClick={() => setSelectedSize(sz)}
+                  disabled={getSizeStock(product, sz) <= 0}
                   className={`py-2 rounded-xl border-2 text-xs font-pixel-title font-bold transition-all ${
                     selectedSize === sz
                       ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2.5px_2.5px_0px_0px_#57446d]'
-                      : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
+                      : getSizeStock(product, sz) <= 0
+                        ? 'cursor-not-allowed bg-stone-100 border-[#a79bbd] text-[#a79bbd] line-through'
+                        : 'bg-white border-[#57446d] text-[#6b5b82] hover:bg-[#fdf2f8]'
                   }`}
                 >
                   {sz}
@@ -319,13 +329,14 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <button
               type="button"
               onClick={handleAddToCart}
+              disabled={soldOut || selectedSizeSoldOut}
               className={`pixel-btn-pink w-full py-3.5 px-6 rounded-xl text-xs font-pixel-title uppercase transition-all ${
                 addedNotice
                   ? '!bg-emerald-400 !text-white !border-[#57446d]'
                   : ''
               }`}
             >
-              {addedNotice ? '✓ ADDED TO BAG ♡' : `[ ADD TO BAG // ${product.priceDH} DH ♡ ]`}
+              {soldOut ? '[ SOLD OUT ]' : selectedSizeSoldOut ? '[ THIS SIZE IS SOLD OUT ]' : addedNotice ? '✓ ADDED TO BAG ♡' : `[ ADD TO BAG // ${product.priceDH} DH ♡ ]`}
             </button>
           </div>
 

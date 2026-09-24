@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/lib/cart/CartProvider';
+import type { Product } from '@/lib/types';
+import { getSizeStock } from '@/lib/types';
 
-export default function CheckoutClient() {
-  const { items, subtotalDH, subtotalUSD, clearCart } = useCart();
+export default function CheckoutClient({ products }: { products: Product[] }) {
+  const { items, clearCart } = useCart();
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -20,6 +22,17 @@ export default function CheckoutClient() {
 
   const [isOrdered, setIsOrdered] = useState(false);
   const [orderId, setOrderId] = useState('');
+  // Refresh names, images, and prices from the managed catalogue before checkout.
+  const checkoutItems = items.map((item) => {
+    const product = products.find((candidate) => candidate.id === item.productId);
+    return product ? { ...item, name: product.name, slug: product.slug, image: product.images[0], priceDH: product.priceDH, priceUSD: product.priceUSD } : item;
+  });
+  const subtotalDH = checkoutItems.reduce((total, item) => total + item.priceDH * item.quantity, 0);
+  const subtotalUSD = checkoutItems.reduce((total, item) => total + item.priceUSD * item.quantity, 0);
+  const unavailableItems = items.filter((item) => {
+    const product = products.find((candidate) => candidate.id === item.productId);
+    return !product || getSizeStock(product, item.size) < item.quantity;
+  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -30,6 +43,7 @@ export default function CheckoutClient() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (unavailableItems.length) return;
     const id = `NAIL-${Math.floor(100000 + Math.random() * 900000)}`;
     setOrderId(id);
 
@@ -40,7 +54,7 @@ export default function CheckoutClient() {
       msg += `• City: ${formData.city}\n`;
       msg += `• Address: ${formData.address}\n\n`;
       msg += `*SETS ORDERED:*\n`;
-      items.forEach((item, i) => {
+      checkoutItems.forEach((item, i) => {
         msg += `${i + 1}. ${item.name} (${item.shape}, ${item.length}, Size: ${item.size}) × ${item.quantity} - ${item.priceDH * item.quantity} DH\n`;
         if (item.customSizes) {
           msg += `   Custom mm: T:${item.customSizes.thumb}, I:${item.customSizes.index}, M:${item.customSizes.middle}, R:${item.customSizes.ring}, P:${item.customSizes.pinky}\n`;
@@ -127,11 +141,12 @@ export default function CheckoutClient() {
             </span>
           </div>
           <span className="text-xs font-mono font-bold text-[#db2777]">
-            {items.length} Set(s) in Bag
+            {checkoutItems.length} Set(s) in Bag
           </span>
         </div>
       </div>
 
+      {unavailableItems.length > 0 && <div role="alert" className="mb-5 rounded-xl border-2 border-red-600 bg-red-50 p-4 text-sm text-red-800"><strong className="font-pixel-title text-[10px]">STOCK CHANGED</strong><p className="mt-2">{unavailableItems.map((item) => item.name).join(', ')} is no longer available in the selected size or quantity. Remove it from your cart before confirming.</p></div>}
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* Shipping Form */}
         <div className="md:col-span-7 retro-pixel-window p-5 flex flex-col gap-4 bg-white rounded-2xl">
@@ -272,7 +287,7 @@ export default function CheckoutClient() {
           </h2>
 
           <div className="flex flex-col gap-2.5 max-h-56 overflow-y-auto pr-1">
-            {items.map((item) => (
+            {checkoutItems.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center gap-2.5 p-2 bg-[#fdf8fa] border-2 border-[#57446d] rounded-xl shadow-[2px_2px_0px_0px_#57446d] text-xs font-pixel-body"
@@ -322,7 +337,8 @@ export default function CheckoutClient() {
 
           <button
             type="submit"
-            className="pixel-btn-pink w-full py-3.5 text-xs rounded-xl"
+            disabled={unavailableItems.length > 0}
+            className="pixel-btn-pink w-full py-3.5 text-xs rounded-xl disabled:cursor-not-allowed disabled:opacity-50"
           >
             CONFIRM ORDER ♡
           </button>
