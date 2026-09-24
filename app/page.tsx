@@ -1,6 +1,6 @@
-import Image from 'next/image';
+
 import Link from 'next/link';
-import { SHOP_VIBES } from '@/lib/products';
+
 import { getPublicProducts, getPublicPromotions } from '@/lib/catalog/server';
 import ProductCard from '@/app/components/shop/ProductCard';
 import InteractiveLogo from '@/app/components/navigation/InteractiveLogo';
@@ -10,6 +10,16 @@ import HeroPromotions from '@/app/components/home/HeroPromotions';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * HomePage Component
+ * 
+ * The main entry point of the website. It fetches public products and promotions,
+ * displaying them in a retro, animated grid layout. It integrates interactive
+ * components like AnimatedCat and HomeAnimation.
+ * 
+ * NOTE: For future modularity, sections like the 'Hero', 'Marquee', and
+ * 'Trending Products' can be extracted into their own respective components.
+ */
 export default async function HomePage() {
   // Keep the homepage grid short; the full catalog lives on /shop.
   const [products, promotions] = await Promise.all([getPublicProducts(), getPublicPromotions()]);
@@ -108,60 +118,7 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* Sequence 6 loops beside the title; sequence 4 starts on hover and loops frames 23–25. */}
-        <section id="vibe" className="flex flex-col items-center gap-5">
-          <div className="relative flex w-full min-h-[175px] items-end pb-4 sm:min-h-[150px]">
-            <div className="relative z-10">
-              <span className="font-pixel-body text-xs text-[#db2777]">a set for every side of you ♡</span>
-              <h2 className="font-pixel-title text-lg sm:text-xl uppercase font-bold text-[#3b2b4e] mt-2">Shop by vibe</h2>
-            </div>
-            <div className="absolute left-0 top-0 w-[175px] sm:bottom-0 sm:left-[205px] sm:top-auto sm:w-[220px] lg:left-[240px] lg:w-[270px]">
-              <HomeAnimation sequence={6} label="the stargazing cat" alt="Gray cat blinking among little stars next to Shop by vibe" />
-            </div>
-            <div className="absolute right-0 top-0 w-[175px] sm:-bottom-2 sm:right-2 sm:top-auto sm:w-[230px] lg:w-[270px] z-10">
-              <HomeAnimation sequence={4} label="the curious cat" alt="Calico cat playing with a toy mouse beside the nail collections" />
-            </div>
-          </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-            {SHOP_VIBES.map((card) => (
-              <Link
-                key={card.id}
-                href={`/shop?vibe=${card.id}`}
-                className="pixel-mini-window group flex flex-col transition-all hover:-translate-y-1"
-              >
-                <div className="bg-[#ede7f6] px-2.5 py-1.5 border-b-2 border-[#57446d] flex items-center justify-between font-pixel-title text-[9px] text-[#57446d]">
-                  <span>vibe.exe</span>
-                  <div className="flex gap-1.5">
-                    <span>—</span>
-                    <span>✕</span>
-                  </div>
-                </div>
-
-                <div className="relative w-full aspect-square bg-[#fff5f7] border-b-2 border-[#57446d] overflow-hidden">
-                  <Image
-                    src={card.image}
-                    alt={card.label}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-
-                <div className="p-2.5 bg-white flex items-center justify-between font-pixel-title text-[11px] text-[#3b2b4e]">
-                  <span>[{card.label.toUpperCase()}]</span>
-                  <span className="text-[#db2777]">➔</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className="flex w-full min-h-[70px] items-center justify-center">
-            <Link href="/shop" className="pixel-btn-pink relative z-10 px-6 py-2.5 text-xs rounded-xl">
-              [ VIEW ALL VIBES ➔ ]
-            </Link>
-          </div>
-        </section>
 
         {/* Sequence 7 plays on hover, then loops frames 19–26; sequence 3 loops on its own. */}
         <section className="relative flex flex-col gap-4 pt-12 sm:pt-16">
@@ -219,7 +176,7 @@ export default async function HomePage() {
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-pixel text-[11px] font-bold text-[#3b2b4e]">
               <Link href="/" className="hover:text-[#db2777] whitespace-nowrap">[ Home ]</Link>
               <Link href="/shop" className="hover:text-[#db2777] whitespace-nowrap">[ Shop ]</Link>
-              <Link href="/#vibe" className="hover:text-[#db2777] whitespace-nowrap">[ Vibes ]</Link>
+
               <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#db2777] whitespace-nowrap">[ IG ]</a>
             </div>
 

@@ -7,6 +7,15 @@ import { useCart } from '@/lib/cart/CartProvider';
 import type { Product } from '@/lib/types';
 import { getSizeStock } from '@/lib/types';
 
+/**
+ * CheckoutClient Component
+ * 
+ * Handles the client-side checkout process, including form state management,
+ * order validation, and total price calculation. Includes support for COD,
+ * Card, and WhatsApp order submission.
+ * 
+ * @param {Product[]} products - List of available products to validate cart items against.
+ */
 export default function CheckoutClient({ products }: { products: Product[] }) {
   const { items, clearCart } = useCart();
 
@@ -44,7 +53,8 @@ export default function CheckoutClient({ products }: { products: Product[] }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (unavailableItems.length) return;
-    const id = `NAIL-${Math.floor(100000 + Math.random() * 900000)}`;
+    // Generate a unique order ID using crypto to avoid ESLint purity warnings
+    const id = `NAIL-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
     setOrderId(id);
 
     if (formData.paymentMethod === 'whatsapp') {

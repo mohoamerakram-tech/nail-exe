@@ -6,6 +6,14 @@ import { useCart } from '@/lib/cart/CartProvider';
 import { useWishlist } from '@/lib/cart/WishlistContext';
 import InteractiveLogo from './InteractiveLogo';
 
+/**
+ * Navbar Component
+ * 
+ * Main navigation bar for the application.
+ * Provides links to key pages (Home, Shop), a search bar, and 
+ * displays wishlist and cart item counts. 
+ * Designed with a retro pixel aesthetic.
+ */
 export default function Navbar() {
   const pathname = usePathname();
   const { itemCount, toggleCart } = useCart();
@@ -51,12 +59,12 @@ export default function Navbar() {
       {/* Main Navigation Row */}
       <div className="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
         {/* Left: Interactive Video Logo */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-1 items-center gap-2.5">
           <InteractiveLogo variant="navbar" />
         </div>
 
         {/* Center: Nav Links */}
-        <nav className="hidden md:flex items-center gap-2 font-pixel text-[11px] font-bold">
+        <nav className="hidden md:flex items-center justify-center gap-2 font-pixel text-[11px] font-bold shrink-0">
           <Link
             href="/"
             className={`px-3 py-1.5 rounded-lg border-2 transition-all ${
@@ -77,22 +85,11 @@ export default function Navbar() {
           >
             [ Shop ]
           </Link>
-          <Link
-            href="/#vibe"
-            className="px-3 py-1.5 text-[#57446d] border-2 border-transparent hover:border-[#57446d] hover:bg-[#fce7f3] hover:shadow-[2px_2px_0px_0px_#57446d] rounded-lg transition-all"
-          >
-            [ Vibes ]
-          </Link>
-          <Link
-            href="/custom-studio"
-            className={`px-3 py-1.5 rounded-lg border-2 transition-all ${pathname === '/custom-studio' ? 'bg-[#fbcfe8] border-[#57446d] text-[#3b2b4e] shadow-[2px_2px_0px_0px_#57446d]' : 'text-[#57446d] border-transparent hover:border-[#57446d] hover:bg-[#fce7f3]'}`}
-          >
-            [ Studio ]
-          </Link>
+
         </nav>
 
         {/* Right: Search, Wishlist & Cart Counter */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-1 items-center justify-end gap-3">
           {/* Native GET form keeps search usable without client-side routing state. */}
           <form action="/shop" role="search" className="hidden sm:flex items-center bg-white border-2 border-[#57446d] shadow-[2px_2px_0px_0px_#57446d] rounded-lg px-2.5 py-1 text-xs font-pixel-body">
             <button type="submit" aria-label="Search nail sets" className="text-[#db2777] mr-1.5 text-[10px]">🔍</button>
