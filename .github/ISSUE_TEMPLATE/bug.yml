@@ -1,0 +1,46 @@
+name: Bug report
+description: Report a reproducible problem without sensitive data.
+title: '[Bug] '
+labels: ['bug', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: Do not include passwords, tokens, customer information, addresses, or security exploit details.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Describe the observed and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: input
+    id: route
+    attributes:
+      label: Affected route
+      placeholder: /shop/example
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Local development
+        - Shared staging
+        - Production
+        - Unknown
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Safe diagnostic details
+      description: Add browser/OS information or sanitized screenshots. Remove secrets and personal data.

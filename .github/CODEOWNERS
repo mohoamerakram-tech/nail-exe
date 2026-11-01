@@ -1,0 +1,9 @@
+# Update this entry if the repository moves to an organization-owned team.
+* @mohoamerakram-tech
+
+# Security-sensitive areas always require an owner review.
+/app/api/admin/ @mohoamerakram-tech
+/lib/admin/ @mohoamerakram-tech
+/lib/catalog/ @mohoamerakram-tech
+/supabase/ @mohoamerakram-tech
+/.github/workflows/ @mohoamerakram-tech

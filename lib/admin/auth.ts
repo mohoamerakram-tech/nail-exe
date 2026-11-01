@@ -67,4 +67,8 @@ export function adminCookieOptions() {
   return { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' as const, path: '/', maxAge: SESSION_SECONDS };
 }
 
-export function getConfiguredAdminEmail() { return config().email; }
+// Prefill the owner email only during local development. Production should not
+// advertise an administrator identifier on a public login page.
+export function getConfiguredAdminEmail() {
+  return process.env.NODE_ENV === 'production' ? '' : config().email;
+}
